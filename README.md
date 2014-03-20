@@ -320,9 +320,9 @@ ValuePotion.getInstance().trackEvent("stage_clear", values);
 
 #### 결제 이벤트 전송하기
 
-결제 이벤트는 게임 내 구매(in app billing / in app purchase)가 발생했을 때 사용되는 이벤트입니다.
+결제 이벤트는 게임 내 구매(In App Billing/In App Purchase)가 발생했을 때 사용되는 이벤트입니다.
 
-결제 이벤트를 전송하기 위해서는 TrackPurchaseEvent() Method를 사용합니다.
+결제 이벤트를 전송하기 위해서는 trackPurchaseEvent() Method를 사용합니다.
 기본적으로 eventName 과 revenueAmount, currency 의 3가지 인자(Arguments)가 필요한 Method와
 IAP 캠페인을 통한 트래킹일 경우에 사용하는 productId, campaignId, contentId의 3개의 인자를 추가로 전송하는 6개 인자 Method가 있습니다. 
 
