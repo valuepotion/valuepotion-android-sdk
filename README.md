@@ -54,7 +54,7 @@ ValuePotion 클래스의 init(Context context, String clientId, String secretKey
 초기화 위치는 어느 곳이나 상관 없지만, 가능한 앱이 실행될 때 즉시 호출되는 위치에 추가하는 것이 좋습니다.
 일반적으로 Application 를 상속하고, onCreate() 메소드 내부에 추가하는 것이 적당합니다.
 
-client id와 secret key는 [valuepotion|http://valuepotion.com]에서 등록하신 앱 정보 화면에서 확인 가능합니다.
+client id와 secret key는 [valuepotion.com](http://valuepotion.com)에서 등록하신 앱 정보 화면에서 확인 가능합니다.
 
 ##### Application.onCreate()
 
@@ -164,7 +164,7 @@ gender         |  남성인 경우 "M", 여성인 경우 "F" 문자열로 할당
 
 ## 캠페인 연동
 
-[valuepotion|http://valuepotion.com]에서 생성한 캠페인을 interstitial 형태로 앱에 노출시킬 수 있습니다.
+[valuepotion.com](http://valuepotion.com)에서 생성한 캠페인을 interstitial 형태로 앱에 노출시킬 수 있습니다.
 모든 interstitial은 로케이션 단위로 관리되며, 로케이션 이름은 정해진 규칙 없이 자유롭게 할당하실 수 있습니다.
 
 #### interstitial 캐싱하기
