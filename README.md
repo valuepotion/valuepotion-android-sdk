@@ -129,7 +129,7 @@ public class MainActivity extends Activity{
 현재는 사용자의 계정 id, 성별, 연령 정보를 추가로 설정하실 수 있습니다.
 
 
-```
+```java
 ValuePotionManager.SetUserId("user1234");
 ValuePotionManager.SetUserServerId("server1");
 ValuePotionManager.SetUserLevel(10);
@@ -140,7 +140,7 @@ ValuePotionManager.SetUserFriends(12);
 
 또는
 
-```
+```java
 Dictionary<string, string> userInfo = new Dictionary<string, string>();
 userInfo.Add("userId", "user1234");
 userInfo.Add("serverId", "server1");
@@ -172,7 +172,7 @@ gender         |  남성인 경우 "M", 여성인 경우 "F" 문자열로 할당
 앱 실행 초기에 미리 캠페인 데이터를 받아 캐싱하고, 이후 필요한 시점에 즉시 interstitial을 보여줄 수 있습니다.
 다음의 코드는 main_menu, item_shop 이라는 2가지 로케이션에 대해 interstitial을 캐싱하는 예제입니다.
 
-```
+```java
 ValuePotion.getInstance().cacheInterstitial(CurrentActivity.this, "main_menu");
 ValuePotion.getInstance().cacheInterstitial(CurrentActivity.this, "item_shop");
 ```
@@ -184,7 +184,7 @@ openInterstitial(String) 메소드는 지정된 로케이션에 캐시가 존재
 만약 해당 로케이션에 캐시가 존재하지 않으면 서버와 통신하여 데이터를 가져와 화면에 노출시키게 됩니다.
 다음은 main_menu 로케이션에서 interstitial을 띄우는 예제입니다.
 
-```
+```java
 ValuePotion.getInstance().openInterstitial(CurrentActivity.this, "main_menu");
 ```
 
@@ -194,7 +194,7 @@ interstitial 데이터를 필요 시마다 서버로부터 받아와서 화면�
 따라서 앱 실행 초기에 모든 로케이션에 대해 캐싱해 두고, 캐시가 존재하는 로케이션에 대해서만 interstitial을 노출하고 싶을 수도 있습니다.
 다음은 item_shop 로케이션에 캐시가 존재하는 경우에만 interstitial을 노출하도록 처리한 예제입니다.
 
-```
+```java
 if ( ValuePotion.getInstance().hasCachedInterstitial("item_shop") ) {
     ValuePotion.getInstance().openInterstitial(CurrentActivity.this, "item_shop");
 }
@@ -213,7 +213,7 @@ ValuePotion.getInstance().setListener(listener);
 ##### 캐싱 관련 delegate
 
 interstitial의 캐싱 성공 / 실패에 대한 delegate 처리를 할 수 있습니다.
-```
+```java
 @Override
 void onCachedInterstitial(ValuePotion vp, String location)
 {
@@ -231,7 +231,7 @@ void onFailedToCacheInterstitial(ValuePotion vp, String location, ValuePotionExc
 
 interstitial의 노출 성공 / 실패 / 종료에 대한 delegate 처리를 할 수 있습니다.
 
-```
+```java
 @Override
 void onReadyToOpenInterstitial(ValuePotion vp, String location)
 {
@@ -255,7 +255,7 @@ void onClosedInterstitial(ValuePotion vp, String location)
 
 사용자가 interstitial 내부에서 발생시킨 액션에 대한 delegate 처리를 할 수 있습니다.
 
-```
+```java
 @Override
 void onRequestedOpenURL(ValuePotion vp, String location, String url)
 {
@@ -292,12 +292,12 @@ void onRequestedReward(ValuePotion vp, String location, Reward reward)
 이벤트 이름은 자유롭게 선언하여 사용하면 되며, 값은 String, double형 숫자, Map<String,Double> 타입의 객체를 할당할 수 있습니다.
 다음은 비결제 이벤트를 전송하는 예제입니다.
 
-```
+```java
 ValuePotion.getInstance().trackEvent("stage_clear", 3);
 ```
 
 특별한 값이 존재하지 않는 이벤트인 경우 이벤트 이름만 넘기면 됩니다.
-```
+```java
 ValuePotion.getInstance().trackEvent("login");
 ```
 
@@ -305,7 +305,7 @@ ValuePotion.getInstance().trackEvent("login");
 또한 NSDictionary 객체를 이벤트 값으로 사용하는 경우, 각 value 역시 숫자 형태의 데이터만 존재해야 합니다.
 다음 예제는 trackEvent(String, Double 또는 Map<String,Double> ) 메소드의 올바른 사용 예를 보여줍니다.
 
-```
+```java
 // 올바른 예
 ValuePotion.getInstance().trackEvent("item_wing_use",23);
 ValuePotion.getInstance().trackEvent("error",400);
@@ -329,7 +329,7 @@ IAP 캠페인을 통한 트래킹일 경우에 사용하는 productId, campaignI
 결제 이벤트를 전송하면 앱 별 매출 리포트 집계가 가능합니다.
 다음은 결제 이벤트를 전송하는 예제입니다.
 
-```
+```java
 ValuePotion.getInstance().trackPurchaseEvent("gold_purchase", 0.99, "USD");
 ValuePotion.getInstance().trackPurchaseEvent("gold_purchase", 2500, "KRW");
 ```
@@ -338,7 +338,7 @@ IAP 캠페인의 interstitial로부터 구매가 발생한 경우, 추가 인자
 추가 인자는 총 3가지로, productId(구매 아이템의 id), campaignId(IAP 캠페인의 id), contentId(IAP 캠페인 소재의 id)입니다.
 productId, campaignId, contentId 값은 "액션 관련 delegate" 항목의 OnRequestPurchase() 델리게이트 메소드를 통해 전달받게 됩니다.
 
-```
+```java
 VPPurchase lastPurchase = null;
 public void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase) {
     lastPurchase = purchase;
@@ -361,7 +361,7 @@ ValuePotion.getInstance().trackPurchaseEvent("wing_purchase", item.getPriceAmoun
 만약 IAP 캠페인을 거치지 않은 경우에 productId 별로 데이터를 보내고 싶을때에는 
 아래와 같이 productId를 직접 전달하면 됩니다.
 
-```
+```java
 ValuePotion.getInstance().trackPurchaseEvent("wing_purchase", 1.99, "USD", "item_02_wing_2ea", null, null);
 ```
 
