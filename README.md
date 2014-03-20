@@ -19,7 +19,7 @@ ValuePotion Android SDK는 다음과 같이 구성되어 있습니다.
 ##### SDK 파일 복사
 
 valuepotion.jar 파일을 libs 디렉토리에 복사해 넣습니다.
-![](./images/android_integration.png =300x)
+![libs 디렉토리](./images/android_integration.png?raw=true =300x)
 
 ##### 필수 framework 설정
 
