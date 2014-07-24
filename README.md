@@ -64,15 +64,15 @@ If you've done all right so far, you should be able to see statistics of session
 ## Integrate with Interstitial Ads
 
 ### 1. Display Interstitial Ads
-If you've created a campaign at [ValuePotion](https://valuepotion.com), you can display it as an interstitial ad at your own app. Before displaying interstitial ads, you should set up a location. Otherwise, "default" location will be used by default.
+If you've created a campaign at [ValuePotion](https://valuepotion.com), you can display it as an interstitial ad at your own app. Before displaying interstitial ads, you should set up a placement. Otherwise, "default" placement will be used by default.
 
-**Location** is a name to distinguish many points where you want to display ads. There's no restriction but it just should be a string.
+**placement** is a name to distinguish many points where you want to display ads. There's no restriction but it just should be a string.
 
 ```java
-// Display ads at "default" location.
+// Display ads at "default" placement.
 ValuePotion.getInstance().openInterstitial();
 
-// Display ads at "main_menu" location.
+// Display ads at "main_menu" placement.
 ValuePotion.getInstance().openInterstitial("main_menu");
 ```
 
@@ -81,7 +81,7 @@ Using `openInterstitial()` method, the SDK will download data for ads via HTTP a
 
 
 ```java
-// If you cache an ad for "after_login" location once,
+// If you cache an ad for "after_login" placement once,
 ValuePotion.getInstance().cacheInterstitial("after_login");
 
 ...
@@ -94,9 +94,9 @@ ValuePotion.getInstance().openInterstitial("after_login");
 You can display interstitial ads only when caches are available.
 
 ```java
-// Check if the cache for "item_shop" location exists.
+// Check if the cache for "item_shop" placement exists.
 if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
-  // then, display the ad for "item_shop" location.
+  // then, display the ad for "item_shop" placement.
   ValuePotion.getInstance().openInterstitial("item_shop");
 }
 ```
@@ -137,42 +137,42 @@ public static interface ValuePotionListener {
     /**
      * This callback method is called when caching interstitial ad is successfully done after calling cacheInterstitial() method.
      */
-    void onCachedInterstitial(ValuePotion vp, String location);
+    void onCachedInterstitial(ValuePotion vp, String placement);
 
     /**
      * This callback method is called when caching interstitial ad is failed after calling `cacheInterstitial()` method.
      */
-    void onFailedToCacheInterstitial(ValuePotion vp, String location, String error);
+    void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
 
     /**
      * This callback method is called right before displaying interstitial ad.
      */
-    void onReadyToOpenInterstitial(ValuePotion vp, String location);
+    void onReadyToOpenInterstitial(ValuePotion vp, String placement);
 
     /**
      * This callback method is called when interstitial ad is not valid at the time opening it event though the data of interstitial ad exists.
      */
-    void onFailedToOpenInterstitial(ValuePotion vp, String location, String error);
+    void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
 
     /**
      * This callback method is called after view of interstitial ad closes.
      */
-    void onClosedInterstitial(ValuePotion vp, String location);
+    void onClosedInterstitial(ValuePotion vp, String placement);
 
     /**
      * This callback method is called when user clicks external url while interstitial ad is displayed.
      */
-    void onRequestedOpen(ValuePotion vp, String location, String url);
+    void onRequestedOpen(ValuePotion vp, String placement, String url);
 
 	/**
 	 * This callback method is called when user pressed 'Purchase' button while interstitial ad of IAP type is displayed.
 	 */
-    void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);
+    void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
 
 	/**
 	 * This callback method is called when interstitial ad of Reward type is displayed.
 	 */
-    void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards);
+    void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
 
   }
 ```
@@ -196,13 +196,13 @@ ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
 
 ValuePotion provides campaign of In-App Purchase (IAP) type. When a user makes revenue via an ad of IAP type, if you add extra info to payment event, you can get revenue report per campaign in detail. The following code is how to send payment event which occurred from IAP ad.
 
-* Too see more information aboue callback method `onRequestedPurchase`, please see **void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);** item under **Advanced: Listener** section. *
+* Too see more information aboue callback method `onRequestedPurchase`, please see **void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);** item under **Advanced: Listener** section. *
 
 ```java
 
 ValuePotionListener listener = new ValuePotionListener(){
   @Override
-  void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
+  void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase)
   {
     // Proceed the requested payment
 
@@ -327,36 +327,36 @@ public class GCMIntentService extends GCMBaseIntentService {
 `ValuePotionListener` interface has callback methods to integrate campaigns.
 
 ### 1. Callback Methods for Displaying Interstitial Ad
-#### void onReadyToOpenInterstitial(ValuePotion vp, String location);
+#### void onReadyToOpenInterstitial(ValuePotion vp, String placement);
 This callback method is called when displaying interstitial ad is successfully done after calling `openInterstitial` method.
 
 ```java
 @Override
-void onReadyToOpenInterstitial(ValuePotion vp, String location)
+void onReadyToOpenInterstitial(ValuePotion vp, String placement)
 {
 	// Put something you need to do when interstitial ad is displayed.
 	// For example, you can pause game here.	
 }
 ```
 
-#### void onFailedToOpenInterstitial(ValuePotion vp, String location, String error);
+#### void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
 This callback method is called when displaying interstitial ad is failed after calling `openInterstitial` method.
 
 ```java
 @Override
-void onFailedToOpenInterstitial(ValuePotion vp, String location, String error)
+void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error)
 {
 	// Put something you need to do when interstitial ad gets failed.
 	// You can check reason of failure via error variable.
 }
 ```
 
-#### void onClosedInterstitial(ValuePotion vp, String location);
+#### void onClosedInterstitial(ValuePotion vp, String placement);
 This callback method is called when interstitial ad closes.
 
 ```java
 @Override
-void onClosedInterstitial(ValuePotion vp, String location)
+void onClosedInterstitial(ValuePotion vp, String placement)
 {
 	// Put something you need to do when interstitial ad closes.
 	// If you paused your game during ad is open, now you can resume it here.
@@ -364,21 +364,21 @@ void onClosedInterstitial(ValuePotion vp, String location)
 ```
 
 ### 2. Callback Methods for Caching Interstitial Ad
-#### void onCachedInterstitial(ValuePotion vp, String location);
+#### void onCachedInterstitial(ValuePotion vp, String placement);
 This callback method is called when caching interstitial ad is successfully done after calling `cacheInterstitial` method.
 
 ```java
-void onCachedInterstitial(ValuePotion vp, String location)
+void onCachedInterstitial(ValuePotion vp, String placement)
 {
   // Put something you need to do when caching interstitial ad is successfully done
 }
 ```
 
-#### void onFailedToCacheInterstitial(ValuePotion vp, String location, String error);
+#### void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
 This callback method is called when caching interstitial ad is failed after calling `cacheInterstitial` method.
 
 ```java
-void onFailedToCacheInterstitial(ValuePotion vp, String location, String error)
+void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error)
 {
   // Put something you need to do when caching interstitial ad is failed.
   // You can check reason of failure via error variable.
@@ -386,22 +386,22 @@ void onFailedToCacheInterstitial(ValuePotion vp, String location, String error)
 ```
 
 ### 3. Callback Methods for Interstitial Ad Action
-#### void onRequestedOpen(ValuePotion vp, String location, String url);
+#### void onRequestedOpen(ValuePotion vp, String placement, String url);
 This callback method is called when user clicks external url while interstitial ad is displayed.
 
 ```java
-void onRequestedOpen(ValuePotion vp, String location, String url)
+void onRequestedOpen(ValuePotion vp, String placement, String url)
 {
   // Put something you need to do when external url gets opened.
   // App soon goes background, so you can do something like saving user data, etc.
 }
 ```
 
-#### void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);
+#### void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
 This callback method is called when user pressed 'Purchase' button while interstitial ad of IAP type is displayed.
 
 ```java
-void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
+void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase)
 {
 	// Put codes to process real purchase by using parameters: productId, quantity.
 	// purchase object contains properties: name, productId, quantity, campaignId, contentId.
@@ -409,11 +409,11 @@ void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
 }
 ```
 
-#### void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards);
+#### void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
 This callback method is called when interstitial ad of Reward type is displayed.
 
 ```java
-void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards)
+void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards)
 {
   // Array 'rewards' contains rewards which ad is about to give users.
   // With this information you should implement actual code to give rewards to users.

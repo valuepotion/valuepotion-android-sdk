@@ -137,41 +137,41 @@ ValuePotion.ValuePotionListener 인터페이스는 아래와 같은 Callback을 
 ```java
 public static interface ValuePotionListener {
     /**
-     * interstitial 데이터 성공적으로 수신 시 호출됨. 수신된 interstitial 데이터의 location과 현재
-     * cache 되어 있는 모든 location 리스트를 넘겨줌.
+     * interstitial 데이터 성공적으로 수신 시 호출됨. 수신된 interstitial 데이터의 placement과 현재
+     * cache 되어 있는 모든 placement 리스트를 넘겨줌.
      */
-    void onCachedInterstitial(ValuePotion vp, String location);
+    void onCachedInterstitial(ValuePotion vp, String placement);
 
     /**
-     * interstitial 데이터 수신 실패 시 호출됨. 수신에 실패한 interstitial 데이터의 location과 현재
-     * cache 되어 있는 모든 location 리스트, error를 넘겨줌.
+     * interstitial 데이터 수신 실패 시 호출됨. 수신에 실패한 interstitial 데이터의 placement과 현재
+     * cache 되어 있는 모든 placement 리스트, error를 넘겨줌.
      */
-    void onFailedToCacheInterstitial(ValuePotion vp, String location, String error);
+    void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
 
     /**
      * interstitial 뷰가 열리기 직전 호출됨.
      */
-    void onReadyToOpenInterstitial(ValuePotion vp, String location);
+    void onReadyToOpenInterstitial(ValuePotion vp, String placement);
 
     /**
      * interstitial 데이터는 정상적으로 존재하나, 여는 시점에 해당 interstitial이 유효하지 않아 열지 못하는
      * 경우 호출됨.
      */
-    void onFailedToOpenInterstitial(ValuePotion vp, String location, String error);
+    void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
 
     /**
      * interstitial 뷰가 닫히고 난 직후 호출됨.
      */
-    void onClosedInterstitial(ValuePotion vp, String location);
+    void onClosedInterstitial(ValuePotion vp, String placement);
 
     /**
      * interstitial 뷰에서 사용자가 링크를 선택했을 때 호출됨.
      */
-    void onRequestedOpen(ValuePotion vp, String location, String url);
+    void onRequestedOpen(ValuePotion vp, String placement, String url);
 
-    void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);
+    void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
 
-    void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards);
+    void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
 
   }
 ```
@@ -195,13 +195,13 @@ ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
 
 밸류포션은 In App Purchase (이하 IAP) 타입의 캠페인을 제공합니다. 게임 사용자가 IAP 타입의 광고를 통해 매출을 발생시킨 경우, 결제 이벤트에 추가 정보를 더해 전송하면 더욱 상세한 캠페인 별 매출 리포트를 제공 받으실 수 있습니다. 다음은 IAP 광고로부터 발생한 결제 이벤트를 전송하는 예제입니다.
 
-*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 **고급: Listener** 섹션의 **void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);** 항목을 참고하십시오.*
+*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 **고급: Listener** 섹션의 **void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);** 항목을 참고하십시오.*
 
 ```java
 
 ValuePotionListener listener = new ValuePotionListener(){
   @Override
-  void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
+  void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase)
   {
     // 요청 받은 결제를 진행합니다
 
@@ -329,36 +329,36 @@ public class GCMIntentService extends GCMBaseIntentService {
 `ValuePotionListener` 인터페이스에는 캠페인 연동 시 활용 가능한 콜백 메소드가 정의되어 있습니다.
 
 ### 1. Interstitial 노출 관련
-#### void onReadyToOpenInterstitial(ValuePotion vp, String location);
+#### void onReadyToOpenInterstitial(ValuePotion vp, String placement);
 `openInterstitial` 메소드 호출 후, 인터스티셜 광고가 성공적으로 화면에 노출되는 시점에 호출됩니다.
 
 ```java
 @Override
-void onReadyToOpenInterstitial(ValuePotion vp, String location)
+void onReadyToOpenInterstitial(ValuePotion vp, String placement)
 {
   // 인터스티셜 광고가 열릴 때 필요한 작업이 있다면 여기에 구현합니다.
   // 실행 중인 게임을 pause 시키는 등의 처리를 할 수 있습니다.
 }
 ```
 
-#### void onFailedToOpenInterstitial(ValuePotion vp, String location, String error);
+#### void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
 `openInterstitial` 메소드 호출 후, 인터스티셜 광고가 화면에 노출되지 못하는 경우 호출됩니다.
 
 ```java
 @Override
-void onFailedToOpenInterstitial(ValuePotion vp, String location, String error)
+void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error)
 {
   // 인터스티셜 광고 노출에 실패했을 때 필요한 작업이 있다면 여기에 구현합니다.
   // 실패한 원인은 error 를 통해 확인할 수 있습니다.
 }
 ```
 
-#### void onClosedInterstitial(ValuePotion vp, String location);
+#### void onClosedInterstitial(ValuePotion vp, String placement);
 인터스티셜 광고가 열려있는 상태에서 닫힐 때 호출됩니다.
 
 ```java
 @Override
-void onClosedInterstitial(ValuePotion vp, String location)
+void onClosedInterstitial(ValuePotion vp, String placement)
 {
   // 인터스티셜 광고가 닫힐 때 필요한 작업이 있다면 여기에 구현합니다.
   // 광고가 열려있는 동안 게임을 pause 시켰다면, 여기서 resume 시키는 등의 처리를 할 수 있습니다.
@@ -366,21 +366,21 @@ void onClosedInterstitial(ValuePotion vp, String location)
 ```
 
 ### 2. Interstitial 캐싱 관련
-#### void onCachedInterstitial(ValuePotion vp, String location);
+#### void onCachedInterstitial(ValuePotion vp, String placement);
 `cacheInterstitial` 메소드 호출 후, 성공적으로 광고가 캐싱 되었을 때 호출됩니다.
 
 ```java
-void onCachedInterstitial(ValuePotion vp, String location)
+void onCachedInterstitial(ValuePotion vp, String placement)
 {
   // 인터스티셜 광고 캐싱이 완료된 후 필요한 작업이 있다면 여기에 구현합니다.
 }
 ```
 
-#### void onFailedToCacheInterstitial(ValuePotion vp, String location, String error);
+#### void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
 `cacheInterstitial` 메소드 호출 후, 광고 캐싱에 실패했을 때 호출됩니다.
 
 ```java
-void onFailedToCacheInterstitial(ValuePotion vp, String location, String error)
+void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error)
 {
   // 인터스티셜 광고 캐싱에 실패했을 때 필요한 작업이 있다면 여기에 구현합니다.
   // 실패한 원인은 error 를 통해 확인할 수 있습니다.
@@ -388,22 +388,22 @@ void onFailedToCacheInterstitial(ValuePotion vp, String location, String error)
 ```
 
 ### 3. Interstitial 액션 관련
-#### void onRequestedOpen(ValuePotion vp, String location, String url);
+#### void onRequestedOpen(ValuePotion vp, String placement, String url);
 인터스티셜 광고 노출 상태에서 사용자가 외부 링크를 클릭하는 경우 발생합니다.
 
 ```java
-void onRequestedOpen(ValuePotion vp, String location, String url)
+void onRequestedOpen(ValuePotion vp, String placement, String url)
 {
   // 외부 링크를 열 때 필요한 작업이 있다면 여기에 구현합니다.
   // 앱이 Background로 진입하게 되므로, 사용자 데이터를 저장하는 등의 처리를 할 수 있습니다.
 }
 ```
 
-#### void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase);
+#### void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
 IAP 타입의 인터스티셜 광고 노출 상태에서 사용자가 '결제하기'를 선택하는 경우 발생합니다.
 
 ```java
-void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
+void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase)
 {
   // 인자로 전달된 purchase 오브젝트를 가지고 실제 결제를 진행하도록 구현합니다.
   // purchase 오브젝트는 name, productId, quantity, campaignId, contentId 프로퍼티를 담고 있습니다.
@@ -412,11 +412,11 @@ void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase)
 }
 ```
 
-#### void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards);
+#### void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
 Reward 타입의 인터스티셜 광고가 노출될 때 발생합니다.
 
 ```java
-void onRequestedReward(ValuePotion vp, String location, ArrayList<VPReward> rewards)
+void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards)
 {
   // rewards 배열에는 해당 광고를 통해 사용자에게 지급하고자 하는 리워드 오브젝트들이 담겨있습니다.
   // 이 정보들을 가지고 사용자에게 리워드를 지급하는 코드를 구현합니다.

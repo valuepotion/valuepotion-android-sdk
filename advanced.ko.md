@@ -4,7 +4,7 @@
 
 * Eclipse
 * ADT
-* valuepotion-1.0.9.jar
+* valuepotion.jar
 * IAPUtil.java
 
 #### 구성
@@ -215,13 +215,13 @@ ValuePotion.getInstance().setListener(listener);
 interstitial의 캐싱 성공 / 실패에 대한 delegate 처리를 할 수 있습니다.
 ```java
 @Override
-void onCachedInterstitial(ValuePotion vp, String location)
+void onCachedInterstitial(ValuePotion vp, String placement)
 {
     // interstitial 캐싱이 완료되었을 때 필요한 작업을 추가합니다.
 }
 
 @Override
-void onFailedToCacheInterstitial(ValuePotion vp, String location, ValuePotionException e)
+void onFailedToCacheInterstitial(ValuePotion vp, String placement, ValuePotionException e)
 {
     // interstitial 캐싱에 실패했을 때 필요한 작업을 추가합니다.
 }
@@ -233,19 +233,19 @@ interstitial의 노출 성공 / 실패 / 종료에 대한 delegate 처리를 할
 
 ```java
 @Override
-void onReadyToOpenInterstitial(ValuePotion vp, String location)
+void onReadyToOpenInterstitial(ValuePotion vp, String placement)
 {
     // interstitial이 노출될 때 필요한 작업을 추가합니다.
 }
 
 @Override
-void onFailedToOpenInterstitial(ValuePotion vp, String location, String error)
+void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error)
 {
     // interstitial 노출에 실패했을 때 필요한 작업을 추가합니다.
 }
 
 @Override
-void onClosedInterstitial(ValuePotion vp, String location)
+void onClosedInterstitial(ValuePotion vp, String placement)
 {
     // interstitial이 닫힐 때 필요한 작업을 추가합니다.
 }
@@ -257,14 +257,14 @@ void onClosedInterstitial(ValuePotion vp, String location)
 
 ```java
 @Override
-void onRequestedOpenURL(ValuePotion vp, String location, String url)
+void onRequestedOpenURL(ValuePotion vp, String placement, String url)
 {
     // interstitial에서 외부 링크에 대한 클릭이 발생했을 때 호출됩니다.
     // 일반적으로 외부 링크를 클릭하면 현재 앱은 background로 들어가게 되므로, 이 경우 필요한 처리를 여기서 구현합니다.
 }
 
 @Override
-void onRequestedPurchase(ValuePotion vp, String location, Purchase purchase)
+void onRequestedPurchase(ValuePotion vp, String placement, Purchase purchase)
 {
     // In App Purchase 캠페인의 interstitial 내부에서 사용자가 구매하기를 선택했을 때 호출됩니다.
     // purchase 객체는 productIdentifier, quantity, name 속성을 가지고 있습니다.
@@ -272,7 +272,7 @@ void onRequestedPurchase(ValuePotion vp, String location, Purchase purchase)
 }
 
 @Override
-void onRequestedReward(ValuePotion vp, String location, Reward reward)
+void onRequestedReward(ValuePotion vp, String placement, Reward reward)
 {
     // 리워드 캠페인의 interstitial이 화면에 보여질 때 호출됩니다.
     // reward 객체는 name, quantity 속성을 가지고 있습니다.
@@ -340,7 +340,7 @@ productId, campaignId, contentId 값은 "액션 관련 delegate" 항목의 OnReq
 
 ```java
 VPPurchase lastPurchase = null;
-public void onRequestedPurchase(ValuePotion vp, String location, VPPurchase purchase) {
+public void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase) {
     lastPurchase = purchase;
 
     // Purchase 인터스티셜을 클릭시 여기서 purchase 객체내의 정보를 이용하여 결제 프로세스를 시작합니다.  
