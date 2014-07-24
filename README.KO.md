@@ -65,41 +65,41 @@ public class MyActivity extends Activity {
 ## 인터스티셜 광고 연동
 
 ### 1. 인터스티셜 광고 노출하기
-[밸류포션](https://valuepotion.com) 웹 사이트에서 생성한 캠페인을 인터스티셜 광고의 형태로 자신의 앱에 노출시킬 수 있습니다. 인터스티셜 광고를 화면에 띄우기 위해서는 로케이션을 지정해야 하며, 지정하지 않는 경우 "default" 로케이션이 사용됩니다.
+[밸류포션](https://valuepotion.com) 웹 사이트에서 생성한 캠페인을 인터스티셜 광고의 형태로 자신의 앱에 노출시킬 수 있습니다. 인터스티셜 광고를 화면에 띄우기 위해서는 플레이스먼트를 지정해야 하며, 지정하지 않는 경우 "default" 플레이스먼트가 사용됩니다.
 
-로케이션은 게임 내의 여러 지점에서 원하는 광고를 노출 시킬 수 있도록 하기 위해 부여하는 이름으로, 특별한 제약 없이 원하는 이름을
+플레이스먼트는 게임 내의 여러 지점에서 원하는 광고를 노출 시킬 수 있도록 하기 위해 부여하는 이름으로, 특별한 제약 없이 원하는 이름을
 문자열로 지정하면 됩니다.
 
 ```java
-// "default" 로케이션에 대해 광고를 노출 합니다.
+// "default" 플레이스먼트에 대해 광고를 노출 합니다.
 ValuePotion.getInstance().openInterstitial();
 
-// "main_menu" 로케이션에 대해 광고를 노출 합니다.
+// "main_menu" 플레이스먼트에 대해 광고를 노출 합니다.
 ValuePotion.getInstance().openInterstitial("main_menu");
 ```
 
 
 ### 2. 인터스티셜 광고 캐싱하기
-`openInterstitial:` 메소드를 사용하면 HTTP 를 통해 광고 데이터를 받아온 후 화면에 보여주기 때문에, 네트워크 상태에 따라 다소 지연이 발생할 수 있습니다. 최초 게임 구동 시 원하는 로케이션에 대해 광고를 캐싱해두면,
+`openInterstitial:` 메소드를 사용하면 HTTP 를 통해 광고 데이터를 받아온 후 화면에 보여주기 때문에, 네트워크 상태에 따라 다소 지연이 발생할 수 있습니다. 최초 게임 구동 시 원하는 플레이스먼트에 대해 광고를 캐싱해두면,
 이후 원하는 시점에 지연 없이 해당 광고를 화면에 노출시킬 수 있습니다.
 
 ```java
-// 최초 "after_login" 로케이션에 대해 광고를 캐싱합니다.
+// 최초 "after_login" 플레이스먼트에 대해 광고를 캐싱합니다.
 ValuePotion.getInstance().cacheInterstitial("after_login");
 
 ...
 
-// 원하는 시점에 "after_login" 로케이션에 대해 광고를 노출합니다.
+// 원하는 시점에 "after_login" 플레이스먼트에 대해 광고를 노출합니다.
 ValuePotion.getInstance().openInterstitial("after_login");
 ```
 
 ### 3. 캐시가 있을 때만 인터스티셜 광고 노출하기
-특정 로케이션에 캐싱된 광고가 확실히 존재할 때에만 광고를 노출시킬 수도 있습니다.
+특정 플레이스먼트에 캐싱된 광고가 확실히 존재할 때에만 광고를 노출시킬 수도 있습니다.
 
 ```java
-// "item_shop" 로케이션에 캐싱된 광고가 존재하는지 체크합니다.
+// "item_shop" 플레이스먼트에 캐싱된 광고가 존재하는지 체크합니다.
 if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
-  // "item_shop" 로케이션에 대해 광고를 노출합니다.
+  // "item_shop" 플레이스먼트에 대해 광고를 노출합니다.
   ValuePotion.getInstance().openInterstitial("item_shop");
 }
 ```
