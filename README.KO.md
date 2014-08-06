@@ -5,7 +5,7 @@
 ### 1. 앱 정보 등록
 먼저 [밸류포션](https://valuepotion.com) 웹사이트에 방문하여 SDK를 적용할 앱의 정보를 등록합니다. 앱 정보 등록을 완료하면 Client ID 와 Secret Key 가 발급됩니다.
 
-### 2. Android 프로젝트에 SDK 임포트
+### 2. Android 프로젝트에 SDK 가져오기
 
 다운로드 받으신 파일의 압축을 해제한 후,
 libs 디렉토리에 valuepotion.jar 를 추가합니다.
@@ -14,21 +14,7 @@ libs 디렉토리에 valuepotion.jar 를 추가합니다.
 다음은 SDK를 초기화 하는 예제입니다. 
 
 ### init
-android.app.Application 클래스의 onCreate 메소드 내에서 init를 호출하는 것을 권장합니다.
-
-```java
-import com.valuepotion.sdk.ValuePotion;
-public class MyApplication extends Application {
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    // 밸류포션 웹사이트에서 발급받은 Client ID 와 Secret Key 를 사용해 SDK를 초기화 합니다.
-    ValuePotion vp = ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
-  }
-}
-```
-
-또는, 첫번째 Activity 의 onCreate 에서 하셔도 됩니다.
+첫번째 Activity 의 onCreate 에서 초기화를 합니다.
 
 ```java
 import com.valuepotion.sdk.ValuePotion;
@@ -61,6 +47,48 @@ public class MyActivity extends Activity {
 ```
 
 여기까지 설정하면 기본적인 session / install / update 이벤트 트래킹이 가능합니다.
+
+## AndroidManifest.xml 설정
+
+### 퍼미션 등록
+
+```xml
+<!-- Valuepotion Plugin Permissions -->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<!-- Valuepotion Plugin Permissions end -->
+```
+
+### Valuepotion 컴포넌트 등록
+
+```xml
+<!-- Valuepotion Components -->
+	<!-- for GCM push-notification interface -->
+	<activity
+			android:name="com.valuepotion.sdk.VPPopupActivity"
+			android:launchMode="singleInstance"
+			android:theme="@android:style/Theme.Translucent" >
+	</activity>
+
+	<!-- for GCM Push notification interface -->
+	<activity
+			android:name="com.valuepotion.sdk.VPInterstitialActivity"
+			android:theme="@android:style/Theme.Translucent" >
+	</activity>
+
+	<!-- for CPI tracking -->
+	<receiver
+			android:name="com.valuepotion.sdk.VPInstallReceiver"
+			android:exported="true" >
+			<intent-filter>
+					<action android:name="com.android.vending.INSTALL_REFERRER" />
+			</intent-filter>
+	</receiver>
+<!-- Valuepotion Components End -->
+```
+
 
 ## 인터스티셜 광고 연동
 
@@ -266,12 +294,25 @@ ValuePotion.getInstance().setUserFriends(219);
 ### 1. 인증서 등록
 [밸류포션](https://valuepotion.com) 웹사이트에서 앞서 등록한 앱 정보를 업데이트 해야 합니다. 앱 정보 수정 페이지에서 GCM ApiKey를 등록하십시오.
 
-### 2. GCM 클라이언트 구현
+### 2. AndroidManifest.xml 설정
+
+```xml
+<!--
+   'PACKAGE_NAME' 을 앱 패키지 네임으로 변경하세요.
+    예)
+    <application> 태그의 'package' 속성 값이 'com.valuepotion.testapp' 라면,
+    'com.valuepotion.testapp.permission.C2D_MESSAGE' 로 값을 지정하세요.
+-->
+<permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+<uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+```
+
+### 3. GCM 클라이언트 구현
 
 [Implementing GCM Client](http://developer.android.com/intl/ko/google/gcm/client.html)를 참고하시기 바랍니다.
 아래 예제는 위 문서의 예제를 참고하여 작성하였습니다.
 
-### 3. Push Notification 활성화
+### 4. Push Notification 활성화
 Push Notification 을 활성화 시키려면 GCM 클라이언트 기능을 구현한 후, registrationId를 전송하고, 받은 Push Notification 메세지를 처리하도록 해야합니다. 아래 예제를 참고하여 구현하세요.
 
 ```java
@@ -279,7 +320,7 @@ String regid = getRegistrationId(this);
 ValuePotion.getInstance().registerPushToken(regid);
 ```
 
-### 4. Push Notification 비활성화
+### 5. Push Notification 비활성화
 Push Notification 을 비활성화 시키는 경우, 다음 예제를 참고하십시오.
 
 ```java
@@ -287,7 +328,7 @@ Push Notification 을 비활성화 시키는 경우, 다음 예제를 참고하�
 ValuePotion.getInstance().unregisterPushToken();
 ```
 
-#### 4-1. Push Notification 임시 활성화/비활성화
+#### 5-1. Push Notification 임시 활성화/비활성화
 
 Push 메세지의 수신은 되지만, 표시되지 않습니다.
 App 내에서 제어하고자 할 때, 이용합니다.
@@ -303,7 +344,7 @@ ValuePotion.getInstance().setPushEnable(context, true);
 
 ```
 
-### 5. Push Notification 수신 처리
+### 6. Push Notification 수신 처리
 
 GCMBaseIntentService 를 상속하여 GCMIntentService를 만들 때, onMessage 내에서 ValuePotion.treatPushMessage(context, bundle)를 호출하도록 합니다.
 리턴값이 true 이면 ValuePotion이 프로모션을 위해 보낸 메세지이므로 별도의 처리가 필요없습니다.

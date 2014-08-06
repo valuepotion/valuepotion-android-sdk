@@ -13,21 +13,7 @@ Unzip the sdk downloaded, and add `valuepotion.jar` to `libs` folder.
 The following code is to initialize SDK.
 
 ### init
-We recommend you to initialize SDK at `onCreate` method at `android.app.Application` class.
-
-```java
-import com.valuepotion.sdk.ValuePotion;
-public class MyApplication extends Application {
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    // Initialize SDK using Client ID and Secret Key that you got from ValuePotion website.
-    ValuePotion vp = ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
-  }
-}
-```
-
-Or, you can initialize SDK at `onCreate` method at the first activity that will be launched.
+Initialize SDK at `onCreate` method at the first activity that will be launched.
 
 ```java
 import com.valuepotion.sdk.ValuePotion;
@@ -60,6 +46,49 @@ Add the following code into each activity.
 ```
 
 If you've done all right so far, you should be able to see statistics of session, install and update events on ValuePotion dashboard.
+
+## Configure AndroidManifest.xml
+
+### Add permissions
+
+```xml
+<!-- Valuepotion Plugin Permissions -->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<!-- Valuepotion Plugin Permissions end -->
+```
+
+### Add the components of Valuepotion
+
+```xml
+<!-- Valuepotion Components -->
+	<!-- for GCM push-notification interface -->
+	<activity
+			android:name="com.valuepotion.sdk.VPPopupActivity"
+			android:launchMode="singleInstance"
+			android:theme="@android:style/Theme.Translucent" >
+	</activity>
+
+	<!-- for GCM Push notification interface -->
+	<activity
+			android:name="com.valuepotion.sdk.VPInterstitialActivity"
+			android:theme="@android:style/Theme.Translucent" >
+	</activity>
+
+	<!-- for CPI tracking -->
+	<receiver
+			android:name="com.valuepotion.sdk.VPInstallReceiver"
+			android:exported="true" >
+			<intent-filter>
+					<action android:name="com.android.vending.INSTALL_REFERRER" />
+			</intent-filter>
+	</receiver>
+<!-- Valuepotion Components End -->
+```
+
+
 
 ## Integrate with Interstitial Ads
 
@@ -267,11 +296,24 @@ If you integrate with Push Notification API, you can easily create campaigns of 
 ### 1. Register Certificate
 Visit [ValuePotion](https://valuepotion.com) website and update your app information. Please fill in GCM ApiKey at **App Edit** page.
 
-### 2. Implement GCM Client
+### 2. Configure AndroidManifest.xml
+
+```xml
+<!--
+    Replace 'PACKAGE_NAME' to Your App-PackageName
+    ex)
+    If 'package' attribute in <application> tag is 'com.valuepotion.testapp',
+    then set 'com.valuepotion.testapp.permission.C2D_MESSAGE'.
+-->
+<permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+<uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+```
+
+### 3. Implement GCM Client
 
 Please visit [Implementing GCM Client](http://developer.android.com/intl/ko/google/gcm/client.html) for more information. The following example is based on the link.
 
-### 3. Enable Push Notification
+### 4. Enable Push Notification
 To enable push notification, you should send registrationId and process push notification you receive. See the following code.
 
 ```java
@@ -279,7 +321,7 @@ String regid = getRegistrationId(this);
 ValuePotion.getInstance().registerPushToken(regid);
 ```
 
-### 4. Disable Push Notification
+### 5. Disable Push Notification
 To disable push notification, run the following code.
 
 ```java
@@ -287,7 +329,7 @@ To disable push notification, run the following code.
 ValuePotion.getInstance().unregisterPushToken();
 ```
 
-#### 4-1. Temporarily Enable/Disable Push Notification
+#### 5-1. Temporarily Enable/Disable Push Notification
 
 You can disable push notification at client side temporarily so that you don't show push message after receiving it. Use this function when you need to control push notification at app.
 
@@ -302,7 +344,7 @@ ValuePotion.getInstance().setPushEnable(context, true);
 
 ```
 
-### 5. Process Push Notification
+### 6. Process Push Notification
 
 Create GCMIntentService extending GCMBaseIntentService and call `ValuePotion.treatPushMessage(context, bundle)` method at onMessage() method. If that method returns true, you don't have to do anything about that push notification because it's sent by ValuePotion for promotion.
 
