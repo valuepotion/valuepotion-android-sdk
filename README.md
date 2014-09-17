@@ -9,6 +9,14 @@ Visit [ValuePotion](https://valuepotion.com) website and register the informatio
 
 Unzip the sdk downloaded, and add `valuepotion.jar` to `libs` folder.
 
+### 3. Add Dependencies
+In order to use Valuepotion, these two dependencies are required to be included in your project.
+
+1. Google Play Services
+ * Follow the [link](https://developer.android.com/google/play-services/setup.html) and put "Google Play Services" to your project.
+2. Android Support Library
+ * Follow the [link](http://developer.android.com/tools/support-library/setup.html) and refer to "Adding libraries without resources" section since Valuepotion does not need resources from Android Support Library.
+
 ## Initialize SDK
 The following code is to initialize SDK.
 
