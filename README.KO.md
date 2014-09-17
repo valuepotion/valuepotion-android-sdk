@@ -10,6 +10,15 @@
 다운로드 받으신 파일의 압축을 해제한 후,
 libs 디렉토리에 valuepotion.jar 를 추가합니다.
 
+### 3. Dependencies 추가
+밸류포션을 사용하시려면 아래 두 가지 dependencies 가 프로젝트에 포함되어야 합니다.
+
+1. Google Play Services
+ * [링크](https://developer.android.com/google/play-services/setup.html)를 참조하여 Eclipse 혹은 Android Studio 등 사용하시는 IDE 에 해당하는 방법으로 Google Play Services 를 설정하세요.
+2. Android Support Library
+ * [링크](http://developer.android.com/tools/support-library/setup.html)에서 "Adding libraries without resources" 항목을 참조하여 프로젝트에 Android Support Library 를 설정하세요.
+
+
 ## SDK 초기화
 다음은 SDK를 초기화 하는 예제입니다. 
 
