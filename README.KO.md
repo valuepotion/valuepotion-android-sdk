@@ -158,63 +158,7 @@ ValuePotion.getInstance().trackEvent("enter_item_shop");
 ### 2. 결제 이벤트 트래킹
 결제 이벤트는 게임 내 구매(In App Purchase)가 발생했을 때 전송하는 이벤트입니다. 결제 이벤트를 트래킹하면 매출액, ARPU, ARPPU, PPU 등 유용한 지표들의 추이를 매일 확인할 수 있습니다. 다음은 게임 내에서 발생한 결제 이벤트를 전송하는 예제입니다.
 
-#### 2-1. ValuePotionListener
-
-ValuePotion.ValuePotionListener 인터페이스는 아래와 같은 Callback을 지원합니다.
-
-```java
-public static interface ValuePotionListener {
-    /**
-     * interstitial 데이터 성공적으로 수신 시 호출됨. 수신된 interstitial 데이터의 placement과 현재
-     * cache 되어 있는 모든 placement 리스트를 넘겨줌.
-     */
-    void onCachedInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * interstitial 데이터 수신 실패 시 호출됨. 수신에 실패한 interstitial 데이터의 placement과 현재
-     * cache 되어 있는 모든 placement 리스트, error를 넘겨줌.
-     */
-    void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
-
-    /**
-     * interstitial 뷰가 열리기 직전 호출됨.
-     */
-    void onReadyToOpenInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * interstitial 데이터는 정상적으로 존재하나, 여는 시점에 해당 interstitial이 유효하지 않아 열지 못하는
-     * 경우 호출됨.
-     */
-    void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
-
-    /**
-     * interstitial 뷰가 닫히고 난 직후 호출됨.
-     */
-    void onClosedInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * interstitial 뷰에서 사용자가 링크를 선택했을 때 호출됨.
-     */
-    void onRequestedOpen(ValuePotion vp, String placement, String url);
-
-    void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
-
-    void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
-
-  }
-```
-
-ValuePotion 인스턴스의 setListener 함수를 이용하여 콜백에 반응할 수 있습니다.
-
-```java
-
-ValuePotion.getInstance().setListener( new ValuePotionListener(){
-  // Implement Here ...
-});
-
-```
-
-#### 2-2. 이벤트 전송
+#### 2-1. 이벤트 전송
 
 ```java
 // 0.99 달러의 코인 아이템 구매가 발생
@@ -223,7 +167,7 @@ ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
 
 밸류포션은 In App Purchase (이하 IAP) 타입의 캠페인을 제공합니다. 게임 사용자가 IAP 타입의 광고를 통해 매출을 발생시킨 경우, 결제 이벤트에 추가 정보를 더해 전송하면 더욱 상세한 캠페인 별 매출 리포트를 제공 받으실 수 있습니다. 다음은 IAP 광고로부터 발생한 결제 이벤트를 전송하는 예제입니다.
 
-*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 **고급: Listener** 섹션의 **void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);** 항목을 참고하십시오.*
+*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 고급: Listener 섹션의 void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase); 항목을 참고하십시오.*
 
 ```java
 
@@ -368,6 +312,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 ## 고급: Listener
 `ValuePotionListener` 인터페이스에는 캠페인 연동 시 활용 가능한 콜백 메소드가 정의되어 있습니다.
+
+ValuePotion 인스턴스의 setListener 함수를 이용하여 콜백에 반응할 수 있습니다.
+
+```java
+
+ValuePotion.getInstance().setListener( new ValuePotionListener(){
+  // Implement Here ...
+});
+
+```
 
 ### 1. Interstitial 노출 관련
 #### void onReadyToOpenInterstitial(ValuePotion vp, String placement);
