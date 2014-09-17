@@ -167,7 +167,7 @@ ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
 
 밸류포션은 In App Purchase (이하 IAP) 타입의 캠페인을 제공합니다. 게임 사용자가 IAP 타입의 광고를 통해 매출을 발생시킨 경우, 결제 이벤트에 추가 정보를 더해 전송하면 더욱 상세한 캠페인 별 매출 리포트를 제공 받으실 수 있습니다. 다음은 IAP 광고로부터 발생한 결제 이벤트를 전송하는 예제입니다.
 
-*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 고급: Listener 섹션의 void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase); 항목을 참고하십시오.*
+*`onRequestedPurchase` 콜백 메소드에 대한 보다 자세한 정보는 "고급: Listener" 섹션의 `void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);` 항목을 참고하십시오.*
 
 ```java
 
