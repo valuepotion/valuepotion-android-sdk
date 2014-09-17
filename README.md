@@ -157,66 +157,7 @@ ValuePotion.getInstance().trackEvent("enter_item_shop");
 Payment event is tracked when In-App Purchase(In-App Billing) has occurred. If you track payment events, you can check daily statistics of Revenue, ARPU, ARPPU, PPU, etc.
 The following code is an example to send payment event occurred in your game.
 
-#### 2-1. ValuePotionListener
-
-`ValuePotion.ValuePotionListener` interface provides the following callback methods.
-
-```java
-public static interface ValuePotionListener {
-    /**
-     * This callback method is called when caching interstitial ad is successfully done after calling cacheInterstitial() method.
-     */
-    void onCachedInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * This callback method is called when caching interstitial ad is failed after calling `cacheInterstitial()` method.
-     */
-    void onFailedToCacheInterstitial(ValuePotion vp, String placement, String error);
-
-    /**
-     * This callback method is called right before displaying interstitial ad.
-     */
-    void onReadyToOpenInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * This callback method is called when interstitial ad is not valid at the time opening it event though the data of interstitial ad exists.
-     */
-    void onFailedToOpenInterstitial(ValuePotion vp, String placement, String error);
-
-    /**
-     * This callback method is called after view of interstitial ad closes.
-     */
-    void onClosedInterstitial(ValuePotion vp, String placement);
-
-    /**
-     * This callback method is called when user clicks external url while interstitial ad is displayed.
-     */
-    void onRequestedOpen(ValuePotion vp, String placement, String url);
-
-	/**
-	 * This callback method is called when user pressed 'Purchase' button while interstitial ad of IAP type is displayed.
-	 */
-    void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);
-
-	/**
-	 * This callback method is called when interstitial ad of Reward type is displayed.
-	 */
-    void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rewards);
-
-  }
-```
-
-You can call setListener method of ValuePotion instance to register callback.
-
-```java
-
-ValuePotion.getInstance().setListener( new ValuePotionListener(){
-  // Implement Here ...
-});
-
-```
-
-#### 2-2. Track Event
+#### 2-1. Track Event
 
 ```java
 // User purchased $0.99 coin item.
@@ -225,7 +166,7 @@ ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
 
 ValuePotion provides campaign of In-App Purchase (IAP) type. When a user makes revenue via an ad of IAP type, if you add extra info to payment event, you can get revenue report per campaign in detail. The following code is how to send payment event which occurred from IAP ad.
 
-* Too see more information aboue callback method `onRequestedPurchase`, please see **void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);** item under **Advanced: Listener** section. *
+*Too see more information aboue callback method `onRequestedPurchase`, please see `void onRequestedPurchase(ValuePotion vp, String placement, VPPurchase purchase);` item under "Advanced: Listener" section.*
 
 ```java
 
@@ -367,6 +308,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 ## Advanced: Listener
 `ValuePotionListener` interface has callback methods to integrate campaigns.
+
+You can call setListener method of ValuePotion instance to register callback.
+
+```java
+
+ValuePotion.getInstance().setListener( new ValuePotionListener(){
+  // Implement Here ...
+});
+
+```
 
 ### 1. Callback Methods for Displaying Interstitial Ad
 #### void onReadyToOpenInterstitial(ValuePotion vp, String placement);
