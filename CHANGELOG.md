@@ -1,5 +1,8 @@
 # Change Log
 
+## v1.0.17
+* Fixed a bug app crashing when users' android device does not have Google Play Services.
+
 ## v1.0.16
 * Fixed a bug that WebView doesn’t work properly after showing interstitial ad.
 
