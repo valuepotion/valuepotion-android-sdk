@@ -1,5 +1,8 @@
 # Change Log
 
+## v1.0.18
+* Fixed a bug that push token is not registered very occasionally.
+
 ## v1.0.17
 * Fixed a bug app crashing when users' android device does not have Google Play Services.
 
