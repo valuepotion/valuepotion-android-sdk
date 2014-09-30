@@ -429,3 +429,27 @@ void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rew
   }
 }
 ```
+
+## 기타 설정
+
+### 1. 푸시 LED 설정
+푸시를 받았을 때 폰의 화면이 꺼져있다면 LED 에 불이 들어오게 해 푸시가 온 걸 유저에게 알릴 수 있습니다.
+
+```java
+int argb = 0xff2E691F;
+int onMs = 2000;
+int offMs = 1000;
+ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
+```
+
+이렇게 하면 SharedPreference 에 설정이 저장되었다가 나중에 푸시를 받았을 때 그 값을 참조하여 설정한 색상와 시간으로 LED 에 불이 들어옵니다.
+
+### 2. 푸시 진동 설정
+푸시를 받았을 때 울리는 진동의 패턴을 커스터마이징 할 수 있습니다.
+
+```java
+long[] pattern = {...};
+ValuePotion.getInstance().setNotificationVibrate(context, pattern);
+```
+
+이 설정 또한 SharedPreference 에 저장되었다가 나중에 푸시를 받았을 때 추후 사용됩니다. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.

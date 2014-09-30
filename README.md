@@ -424,3 +424,28 @@ void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rew
   }
 }
 ```
+
+
+## Misc.
+
+### 1. Notification LED
+When users receive push notification and their phone screen is off, you can make the LED blink.
+
+```java
+int argb = 0xff2E691F;
+int onMs = 2000;
+int offMs = 1000;
+ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
+```
+
+The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification.
+
+### 2. Notification Vibration
+You can customize vibration pattern when user receives push notification.
+
+```java
+long[] pattern = {...};
+ValuePotion.getInstance().setNotificationVibrate(context, pattern);
+```
+
+Also, the code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. To see more about vibration pattern, please refer to [Android SDK document](http://developer.android.com/reference/android/os/Vibrator.html).
