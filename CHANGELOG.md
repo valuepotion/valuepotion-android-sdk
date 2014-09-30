@@ -1,5 +1,9 @@
 # Change Log
 
+## v1.0.19
+* Now supports customizable notification LED.
+* Now supports customizable notification vibration pattern.
+
 ## v1.0.18
 * Fixed a bug that push token is not registered very occasionally.
 
