@@ -143,21 +143,21 @@ if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
 You can analyze your game with event tracking. And based on events you can create cohort to use for marketing. There are non-payment event and payment event.
 
 ### 1. Non-Payment Event
-Non-payment event is not related to In-App Purchase. You can use non-payment event to analyze user behavior. To use non-payment event, you should define its name and values. The following code is an example to send non-payment event.
+Non-payment event is not related to In-App Purchase. You can use non-payment event to analyze user behavior. To use non-payment event, you should send a name of action and its value. The following code is an example to send non-payment event.
 
 ```java
 // User has been cleared 3rd stage.
-ValuePotion.getInstance().trackEvent("stage_clear","3");
-ValuePotion.getInstance().trackEvent("stage_clear",3);
-ValuePotion.getInstance().trackEvent("stage_clear",3f);
-ValuePotion.getInstance().trackEvent("stage_clear",3.0);
+ValuePotion.getInstance().trackEvent("stage_clear", 3);
+ValuePotion.getInstance().trackEvent("stage_clear", 3f);
+ValuePotion.getInstance().trackEvent("stage_clear", 3.0);
 ```
 
-If there's no specific value needed, you can use event name only.
+If there's no specific value needed, you can set "action" only.
 
 ```java
 // User has visited "item shop" menu.
-ValuePotion.getInstance().trackEvent("enter_item_shop");
+String action = "enter_item_shop";
+ValuePotion.getInstance().trackEvent(action);
 ```
 
 If you want to build a hierarchy of events, you can specify that like following:
