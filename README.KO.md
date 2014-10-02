@@ -146,21 +146,21 @@ if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
 이벤트 트래킹 기능을 통해 게임에 대한 보다 세밀한 분석이 가능합니다. 또한, 이를 기반으로 유저 코호트를 생성하여 마케팅에 활용할 수 있습니다. 이벤트는 크게 비결제 이벤트와 결제 이벤트로 나뉩니다.
 
 ### 1.비결제 이벤트 트래킹
-비결제 이벤트는 게임 내 결제와 무관한 이벤트로, 주로 사용자 행태 분석을 위해 사용합니다. 비결제 이벤트 트래킹을 위해서는 이벤트의 이름과 값을 지정해야 합니다. 다음은 비결제 이벤트를 전송하는 예제입니다.
+비결제 이벤트는 게임 내 결제와 무관한 이벤트로, 주로 사용자 행태 분석을 위해 사용합니다. 비결제 이벤트 트래킹을 위해서는 이벤트의 액션과 값을 지정해야 합니다. 다음은 비결제 이벤트를 전송하는 예제입니다.
 
 ```java
 // 사용자가 3번째 스테이지를 클리어
-ValuePotion.getInstance().trackEvent("stage_clear","3");
-ValuePotion.getInstance().trackEvent("stage_clear",3);
-ValuePotion.getInstance().trackEvent("stage_clear",3f);
-ValuePotion.getInstance().trackEvent("stage_clear",3.0);
+ValuePotion.getInstance().trackEvent("stage_clear", 3);
+ValuePotion.getInstance().trackEvent("stage_clear", 3f);
+ValuePotion.getInstance().trackEvent("stage_clear", 3.0);
 ```
 
 특별한 값이 필요치 않은 이벤트인 경우, 간단히 이벤트 이름만을 지정하여도 됩니다.
 
 ```java
 // 사용자가 item shop 메뉴에 방문
-ValuePotion.getInstance().trackEvent("enter_item_shop");
+String action = "enter_item_shop";
+ValuePotion.getInstance().trackEvent(action);
 ```
 
 이벤트에 계층을 두어 구분하고 싶을 때는 다음과 같이 하실 수 있습니다.
