@@ -160,6 +160,15 @@ If there's no specific value needed, you can use event name only.
 ValuePotion.getInstance().trackEvent("enter_item_shop");
 ```
 
+If you want to build a hierarchy of events, you can specify that like following:
+
+```java
+String category = "item";
+String action = "get_ruby";
+String label = "reward_for_login";
+int value = 30;
+ValuePotion.getInstance().trackEvent(category, action, label, value);
+```
 
 ### 2. Payment Event
 Payment event is tracked when In-App Purchase(In-App Billing) has occurred. If you track payment events, you can check daily statistics of Revenue, ARPU, ARPPU, PPU, etc.
