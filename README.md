@@ -35,7 +35,7 @@ public class MyActivity extends Activity {
 }
 ```
 
-### onStart / onStop
+### onStart / onStop / onNewIntent
 
 Add the following code into each activity.
 
