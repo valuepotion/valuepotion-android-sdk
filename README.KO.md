@@ -53,6 +53,12 @@ public class MyActivity extends Activity {
     super.onStop();
     ValuePotion.getInstance().onStop(this);
   }
+  
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    ValuePotion.getInstance().onNewIntent(this, intent);
+  }
 ```
 
 여기까지 설정하면 기본적인 session / install / update 이벤트 트래킹이 가능합니다.
