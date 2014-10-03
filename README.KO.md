@@ -37,9 +37,9 @@ public class MyActivity extends Activity {
 }
 ```
 
-### onStart / onStop
+### onStart / onStop / onNewIntent
 
-각 Activity 에서 onStart / onStop 내에 아래 코드를 추가합니다.
+각 Activity 에서 onStart / onStop / onNewIntent 내에 아래 코드를 추가합니다.
 
 ```java
   @Override
