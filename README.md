@@ -51,6 +51,12 @@ Add the following code into each activity.
     super.onStop();
     ValuePotion.getInstance().onStop(this);
   }
+  
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    ValuePotion.getInstance().onNewIntent(this, intent);
+  }
 ```
 
 If you've done all right so far, you should be able to see statistics of session, install and update events on ValuePotion dashboard.
