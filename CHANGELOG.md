@@ -1,4 +1,6 @@
 # Change Log
+* The `trackEvent` method now has four parameters: category, action, label, value.
+* The previous `trackEvent` method with two parameters(`eventName` and `eventValue`) still remains, too.
 
 ## v1.0.19
 * Now supports customizable notification LED.
