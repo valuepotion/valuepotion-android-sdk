@@ -468,7 +468,7 @@ int offMs = 1000;
 ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
 ```
 
-The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification.
+The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. If you want to revert the configuration, please delete that code line. Then remove and install the app.
 
 ### 2. Notification Vibration
 You can customize vibration pattern when user receives push notification.
@@ -478,7 +478,7 @@ long[] pattern = {...};
 ValuePotion.getInstance().setNotificationVibrate(context, pattern);
 ```
 
-Also, the code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. To see more about vibration pattern, please refer to [Android SDK document](http://developer.android.com/reference/android/os/Vibrator.html).
+The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. If you want to revert the configuration, please delete that code line. Then remove and install the app. To see more about vibration pattern, please refer to [Android SDK document](http://developer.android.com/reference/android/os/Vibrator.html).
 
 To use notification vibration, you need to add the following permission.
 
