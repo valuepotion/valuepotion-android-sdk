@@ -484,3 +484,9 @@ ValuePotion.getInstance().setNotificationVibrate(context, pattern);
 ```
 
 이 설정 또한 SharedPreference 에 저장되었다가 나중에 푸시를 받았을 때 추후 사용됩니다. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.
+
+푸시 진동을 사용하기 위해서는 AndroidManifest.xml 에 아래와 같이 퍼미션을 추가해야 합니다.
+
+```xml
+<uses-permission android:name="android.permission.VIBRATE" />
+```

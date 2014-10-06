@@ -479,3 +479,9 @@ ValuePotion.getInstance().setNotificationVibrate(context, pattern);
 ```
 
 Also, the code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. To see more about vibration pattern, please refer to [Android SDK document](http://developer.android.com/reference/android/os/Vibrator.html).
+
+To use notification vibration, you need to add the following permission.
+
+```xml
+<uses-permission android:name="android.permission.VIBRATE" />
+```
