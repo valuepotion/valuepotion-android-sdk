@@ -152,10 +152,10 @@ You can analyze your game with event tracking. And based on events you can creat
 Non-payment event is not related to In-App Purchase. You can use non-payment event to analyze user behavior. To use non-payment event, you should send a name of action and its value. The following code is an example to send non-payment event.
 
 ```java
-// User has been cleared 3rd stage.
-ValuePotion.getInstance().trackEvent("stage_clear", 3);
-ValuePotion.getInstance().trackEvent("stage_clear", 3f);
-ValuePotion.getInstance().trackEvent("stage_clear", 3.0);
+// User has been acquired 3 items.
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3);
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3f);
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3.0);
 ```
 
 If there's no specific value needed, you can set "action" only.
@@ -184,7 +184,13 @@ The following code is an example to send payment event occurred in your game.
 
 ```java
 // User purchased $0.99 coin item.
-ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
+String eventName = "purchase_coin";
+double amount = 0.99f;
+String currency = "USD";
+String orderId = The identifier of receipt after completing purchase. ex> "1000000126295148";
+String productId = The identifier of item. ex> "com.valuepotion.tester.item_diamond_1";
+
+ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId);
 ```
 
 ValuePotion provides campaign of In-App Purchase (IAP) type. When a user makes revenue via an ad of IAP type, if you add extra info to payment event, you can get revenue report per campaign in detail. The following code is how to send payment event which occurred from IAP ad.
@@ -201,8 +207,16 @@ ValuePotionListener listener = new ValuePotionListener(){
 
     ...
 
-    // User purchased some Diamond item for KRW 1,200. So you're attaching purchase object as payment event parameters.
-    ValuePotion.getInstance().trackPurchaseEvent("iap_diamond",1200,"KRW",purchase);
+    // User purchased some Diamond item for KRW 1,200 via IAP campaign. So you're attaching campaignId and contentId from purchase object as payment event parameters.
+    String eventName = "purchase_coin";
+    double amount = 0.99f;
+    String currency = "USD";
+    String orderId = The identifier of receipt after completing purchase. ex> "1000000126295148";
+    String productId = The identifier of item. ex> "com.valuepotion.tester.item_diamond_1";
+    String campaignId = purchase.getCampaignId();
+    String contentId = purchase.getContentId();
+
+    ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId, campaignId, contentId);
   }
   
   ...
@@ -224,7 +238,7 @@ ValuePotion.getInstance().setTest(true);
 
 If you send events from an app built with test mode, you should see the events on developer's console at [ValuePotion](https://valuepotion.com) at real time.
 
-**Warning** : Before submitting your app to app store, please disable test mode. Events sent form test mode are only displayed on Developer's console but excluded from analysis.
+**Warning** : Before submitting your app to app store, please disable test mode. Events sent from test mode are only displayed on Developer's console but excluded from analysis.
 
 
 
@@ -234,12 +248,13 @@ You can collect user information as well as events. Possible fields of user info
 You can use this information for marketing by creating user cohort. You can update your information when it changes to integrate with ValuePotion.
 
 ```java
-ValuePotion.getInstance().setUserId("support@valuepotion.com");
-ValuePotion.getInstance().setUserServerId("server1");
-ValuePotion.getInstance().setUserBirth("19830328");
-ValuePotion.getInstance().setUserGender("M");
-ValuePotion.getInstance().setUserLevel(32);
-ValuePotion.getInstance().setUserFriends(219);
+ValuePotion.setUserId("support@valuepotion.com");
+ValuePotion.setUserServerId("server1");
+ValuePotion.setUserBirth("19830328");
+ValuePotion.setUserGender("M");
+ValuePotion.setUserLevel(32);
+ValuePotion.setUserFriends(219);
+ValuePotion.setUserAccountType("guest");
 ```
 
 The following is the detail on each field.
@@ -252,7 +267,7 @@ Field         | Description
 **gender**    | "M" for male, "F" for female.
 **level**     | Level of user in game.
 **friends**   | Number of user's friends.
-
+**accountType**   | Type of user's account type. (facebook, google, guest, etc)
 
 ## Integrate Push Notification
 If you integrate with Push Notification API, you can easily create campaigns of Push type and send message to users. So you can wake up users who haven't played game for long time, or you can also notify users new events in game, etc.

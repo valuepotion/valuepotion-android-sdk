@@ -1,10 +1,39 @@
 # Change Log
-* The `trackEvent` method now has four parameters: category, action, label, value.
-* The previous `trackEvent` method with two parameters(`eventName` and `eventValue`) still remains, too.
+
+## v1.0.20
+* New APIs
+  ```java
+  ValuePotion.getInstance().trackEvent(String category, String action, String label, int value);
+ValuePotion.getInstance().trackEvent(String category, String action, String label, float value);
+ValuePotion.getInstance().trackEvent(String category, String action, String label, double value);
+
+  ValuePotion.getInstance().trackPurchaseEvent(String eventName, double revenueAmount, String currency, String orderId, String productId);
+  
+  ValuePotion.setUserAccountType(String accountType);
+  ```
+
+* Deprecated APIs
+  ```java
+  ValuePotion.getInstance().trackEvent(String action, String value);
+  ValuePotion.getInstance().trackEvent(String action, Map<String, String> values);
+
+  ValuePotion.getInstance().trackPurchaseEvent(String eventName, double revenueAmount, String currency);
+  ValuePotion.getInstance().trackPurchaseEvent(String eventName, double revenueAmount, String currency, String orderId);
+  ValuePotion.getInstance().trackPurchaseEvent(String eventName, double revenueAmount, String currency, VPPurchase purchase);
+  ValuePotion.getInstance().trackPurchaseEvent(String eventName, double revenueAmount, String currency, String orderId, VPPurchase purchase);
+  ```
 
 ## v1.0.19
 * Now supports customizable notification LED.
+
+  ```java
+  ValuePotion.getInstance().setNotificationLights(Context context, int argb, int onMs, int offMs);
+  ```
 * Now supports customizable notification vibration pattern.
+
+  ```java
+  ValuePotion.getInstance().setNotificationVibrate(Context context, long[] pattern);
+  ```
 
 ## v1.0.18
 * Fixed a bug that push token is not registered very occasionally.

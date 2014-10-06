@@ -155,10 +155,10 @@ if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
 비결제 이벤트는 게임 내 결제와 무관한 이벤트로, 주로 사용자 행태 분석을 위해 사용합니다. 비결제 이벤트 트래킹을 위해서는 이벤트의 액션과 값을 지정해야 합니다. 다음은 비결제 이벤트를 전송하는 예제입니다.
 
 ```java
-// 사용자가 3번째 스테이지를 클리어
-ValuePotion.getInstance().trackEvent("stage_clear", 3);
-ValuePotion.getInstance().trackEvent("stage_clear", 3f);
-ValuePotion.getInstance().trackEvent("stage_clear", 3.0);
+// 사용자가 3개의 아이템을 획득
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3);
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3f);
+ValuePotion.getInstance().trackEvent("get_item_ruby", 3.0);
 ```
 
 특별한 값이 필요치 않은 이벤트인 경우, 간단히 이벤트 이름만을 지정하여도 됩니다.
@@ -186,7 +186,13 @@ ValuePotion.getInstance().trackEvent(category, action, label, value);
 
 ```java
 // 0.99 달러의 코인 아이템 구매가 발생
-ValuePotion.getInstance().trackPurchaseEvent("purchase_coin",0.99,"USD");
+String eventName = "purchase_coin";
+double amount = 0.99f;
+String currency = "USD";
+String orderId = 결제 성공 후 발행된 영수증 번호 ex> "1000000126295148";
+String productId = 아이템의 식별자 ex> "com.valuepotion.tester.item_diamond_1";
+
+ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId);
 ```
 
 밸류포션은 In App Purchase (이하 IAP) 타입의 캠페인을 제공합니다. 게임 사용자가 IAP 타입의 광고를 통해 매출을 발생시킨 경우, 결제 이벤트에 추가 정보를 더해 전송하면 더욱 상세한 캠페인 별 매출 리포트를 제공 받으실 수 있습니다. 다음은 IAP 광고로부터 발생한 결제 이벤트를 전송하는 예제입니다.
@@ -203,8 +209,16 @@ ValuePotionListener listener = new ValuePotionListener(){
 
     ...
 
-    // 1,200원의 다이아몬드 아이템 구매가 발생. purchase 객체를 함께 전송
-    ValuePotion.getInstance().trackPurchaseEvent("iap_diamond",1200,"KRW",purchase];
+    // IAP 캠페인을 통해 1,200원의 다이아몬드 아이템 구매가 발생. purchase 객체에 있는 campaignId, contentId 를 함께 전송.
+    String eventName = "purchase_coin";
+    double amount = 0.99f;
+    String currency = "USD";
+    String orderId = 결제 성공 후 발행된 영수증 번호 ex> "1000000126295148";
+    String productId = 아이템의 식별자 ex> "com.valuepotion.tester.item_diamond_1";
+    String campaignId = purchase.getCampaignId();
+    String contentId = purchase.getContentId();
+
+    ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId, campaignId, contentId);
   }
   
   ...
@@ -236,12 +250,13 @@ ValuePotion.getInstance().setTest(true);
 이 정보들을 이용해 유저 코호트를 생성하여 마케팅에 활용할 수있습니다. 사용자 정보는 게임의 진행 중 변경이 있을 때마다 새로이 설정하여 주시면 자동으로 밸류포션과 연동됩니다.
 
 ```java
-ValuePotion.getInstance().setUserId("support@valuepotion.com");
-ValuePotion.getInstance().setUserServerId("server1");
-ValuePotion.getInstance().setUserBirth("19830328");
-ValuePotion.getInstance().setUserGender("M");
-ValuePotion.getInstance().setUserLevel(32);
-ValuePotion.getInstance().setUserFriends(219);
+ValuePotion.setUserId("support@valuepotion.com");
+ValuePotion.setUserServerId("server1");
+ValuePotion.setUserBirth("19830328");
+ValuePotion.setUserGender("M");
+ValuePotion.setUserLevel(32);
+ValuePotion.setUserFriends(219);
+ValuePotion.setUserAccountType("guest");
 ```
 
 각 사용자 정보 항목에 대한 세부 내용은 다음과 같습니다.
@@ -254,6 +269,7 @@ ValuePotion.getInstance().setUserFriends(219);
 **gender**    | 남성인 경우 "M", 여성인 경우 "F" 문자열로 설정합니다.
 **level**     | 사용자의 게임 내 레벨을 설정합니다.
 **friends**   | 사용자의 친구 수를 설정합니다.
+**accountType**   | 사용자의 로그인 계정 타입을 설정합니다. (facebook, google, guest 등)
 
 
 ## Push Notification 연동
