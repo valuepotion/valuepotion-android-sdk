@@ -473,7 +473,7 @@ int offMs = 1000;
 ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
 ```
 
-이렇게 하면 SharedPreference 에 설정이 저장되었다가 나중에 푸시를 받았을 때 그 값을 참조하여 설정한 색상와 시간으로 LED 에 불이 들어옵니다.
+위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오.
 
 ### 2. 푸시 진동 설정
 푸시를 받았을 때 울리는 진동의 패턴을 커스터마이징 할 수 있습니다.
@@ -483,7 +483,7 @@ long[] pattern = {...};
 ValuePotion.getInstance().setNotificationVibrate(context, pattern);
 ```
 
-이 설정 또한 SharedPreference 에 저장되었다가 나중에 푸시를 받았을 때 추후 사용됩니다. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.
+위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.
 
 푸시 진동을 사용하기 위해서는 AndroidManifest.xml 에 아래와 같이 퍼미션을 추가해야 합니다.
 
