@@ -1,5 +1,43 @@
 # Change Log
 
+## v1.0.21
+
+### Upgrading Issue
+
+* If you're upgrading SDK from older version to v1.0.21, you must add the following code into AndroidManifest.xml.
+  ```java
+    <application ...>
+        ...
+
+        <receiver
+            android:name="com.valuepotion.sdk.push.GcmBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.valuepotion.sdk.push.NOTIFICATION_OPENED" />
+            </intent-filter>
+        </receiver>
+
+        ...
+    </application>
+ ```
+
+### API Changes
+
+* Two methods have become static methods. Please replace them like:
+  ```java
+  1)
+  ValuePotion.getInstance().setNotificationLights(...)
+  ->
+  ValuePotion.setNotificationLights(...)
+
+
+  2)
+  ValuePotion.getInstance().setNotificationVibrate(...)
+  ->
+  ValuePotion.setNotificationVibrate(...)
+  ```
+
+* No need to call `ValuePotion.getInstance().onNewIntent(...)` method.
+
 ## v1.0.20
 * New APIs
   ```java

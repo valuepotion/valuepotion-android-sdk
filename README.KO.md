@@ -37,9 +37,9 @@ public class MyActivity extends Activity {
 }
 ```
 
-### onStart / onStop / onNewIntent
+### onStart / onStop
 
-각 Activity 에서 onStart / onStop / onNewIntent 내에 아래 코드를 추가합니다.
+각 Activity 에서 onStart / onStop 내에 아래 코드를 추가합니다.
 
 ```java
   @Override
@@ -52,12 +52,6 @@ public class MyActivity extends Activity {
   protected void onStop() {
     super.onStop();
     ValuePotion.getInstance().onStop(this);
-  }
-  
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    ValuePotion.getInstance().onNewIntent(this, intent);
   }
 ```
 
@@ -470,7 +464,7 @@ void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rew
 int argb = 0xff2E691F;
 int onMs = 2000;
 int offMs = 1000;
-ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
+ValuePotion.setNotificationLights(context, argb, onMs, offMs);
 ```
 
 위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오.
@@ -480,7 +474,7 @@ ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
 
 ```java
 long[] pattern = {...};
-ValuePotion.getInstance().setNotificationVibrate(context, pattern);
+ValuePotion.setNotificationVibrate(context, pattern);
 ```
 
 위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.
