@@ -237,7 +237,7 @@ If you send events from an app built with test mode, you should see the events o
 
 
 ## Integrate User Information
-You can collect user information as well as events. Possible fields of user information are user id, server id which user belongs to, birthdate, gender, level and number of friends. All of them are optional so you can choose which fields to collect.
+You can collect user information as well as events. Possible fields of user information are user id, server id which user belongs to, birthdate, gender, level and number of friends and type of user account. All of them are optional so you can choose which fields to collect.
 
 You can use this information for marketing by creating user cohort. You can update your information when it changes to integrate with ValuePotion.
 
