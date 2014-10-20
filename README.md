@@ -72,14 +72,7 @@ If you've done all right so far, you should be able to see statistics of session
 
 ```xml
 <!-- Valuepotion Components -->
-	<!-- for GCM push-notification interface -->
-	<activity
-			android:name="com.valuepotion.sdk.VPPopupActivity"
-			android:launchMode="singleInstance"
-			android:theme="@android:style/Theme.Translucent" >
-	</activity>
-
-	<!-- for GCM Push notification interface -->
+	<!-- for interstital ad interface -->
 	<activity
 			android:name="com.valuepotion.sdk.VPInterstitialActivity"
 			android:theme="@android:style/Theme.Translucent" >
@@ -267,75 +260,139 @@ Field         | Description
 If you integrate with Push Notification API, you can easily create campaigns of Push type and send message to users. So you can wake up users who haven't played game for long time, or you can also notify users new events in game, etc.
 
 ### 1. Register Certificate
-Visit [ValuePotion](https://valuepotion.com) website and update your app information. Please fill in GCM ApiKey at **App Edit** page.
+Visit [ValuePotion](https://valuepotion.com) website and update your app information. Please fill in GCM ApiKey at **App Edit** page. 'GCM ApiKey' is 'Server Key' you created from [Google Developers Console](https://console.developers.google.com/project).
 
 ### 2. Configure AndroidManifest.xml
 
+* Append the following permissions.
+
 ```xml
-<!--
-    Replace 'PACKAGE_NAME' to Your App-PackageName
-    ex)
-    If 'package' attribute in <application> tag is 'com.valuepotion.testapp',
-    then set 'com.valuepotion.testapp.permission.C2D_MESSAGE'.
--->
-<permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-<uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+<manifest ...>
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!--
+        Replace 'PACKAGE_NAME' with your app's package name.
+        ex)
+        if 'package' of <application> tag is 'com.valuepotion.testapp',
+        put 'com.valuepotion.testapp.permission.C2D_MESSAGE'.
+    -->
+    <permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+
+    <application ...
 ```
 
-### 3. Implement GCM Client
+* Register the following receiver, service and activity.
 
-Please visit [Implementing GCM Client](http://developer.android.com/intl/ko/google/gcm/client.html) for more information. The following example is based on the link.
+```xml
+    <application ...>
+        ...
 
-### 4. Enable Push Notification
-To enable push notification, you should send registrationId and process push notification you receive. See the following code.
+        <!--
+           Replace 'PACKAGE_NAME' with your app's package name.
+        -->
 
-```java
-String regid = getRegistrationId(this);
-ValuePotion.getInstance().registerPushToken(regid);
+        <receiver
+            android:name="com.valuepotion.sdk.push.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.valuepotion.sdk.push.NOTIFICATION_OPENED" />
+
+                <category android:name="PACKAGE_NAME" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.valuepotion.sdk.push.GcmIntentService" />
+
+        <!-- GCM push-notification pop-up style -->
+        <activity
+            android:name="com.valuepotion.sdk.VPPopupActivity"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Translucent" />
+
+    ...
+    </application>
 ```
 
-### 5. Disable Push Notification
-To disable push notification, run the following code.
+* Set `launchMode` of your main activity as `singleTask`.
+ ```xml
+    <application ...>
+        ...
+        <activity
+            android:name="com.mycompany.testapp.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        ...
+    </application>
+```
+
+### 3. Initialize GCM on your main activity
+
+* Find the line you're calling `Valuepotion.getInstance().init(...)` method and call initGCM() method. It's usually located at onCreate() method of your main activity.
 
 ```java
-// Disable Push Notification
+ValuePotion.initGCM(this, SENDER_ID);
+```
+
+* `SENDER_ID` above is 'Project Number' from [Google Developers Console](https://console.developers.google.com/project).
+
+### 4. Configure Vibration, LED (optional)
+
+* You can customize vibration pattern and LED pattern. If not, OS default value will be used.
+
+```java
+ValuePotion.init(this, CLIENT_ID, SECRET_KEY);
+ValuePotion.initGCM(this, SENDER_ID);
+
+// LED Lights
+int argb = 0xff2E691F;
+int onMs = 2000;
+int offMs = 1000;
+ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
+
+// Vibration Pattern
+long[] pattern = {...};
+ValuePotion.getInstance().setNotificationVibrate(context, pattern);
+```
+
+* Vibration pattern and LED pattern will be stored in SharedPreference. If you want to revert the configuration, remove those lines from your code, remove your app on your phone and reinstall it to reset SharedPreference.
+* To know more about vibration pattern, refer to [Android SDK Documentation](http://developer.android.com/reference/android/os/Vibrator.html).
+ * To customize vibration pattern, you need to add the following permission to AndroidManifest.xml as well.
+
+   ```xml
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+
+### 5. Misc
+
+#### Remove push token
+
+If you want to remove push token of a device from Valuepotion server, call the following method.
+
+ ```java
 ValuePotion.getInstance().unregisterPushToken();
 ```
 
-#### 5-1. Temporarily Enable/Disable Push Notification
+#### Temporarily disable push notification
 
-You can disable push notification at client side temporarily so that you don't show push message after receiving it. Use this function when you need to control push notification at app.
+After GCM message, you can display push notification or just ignore it.
+In your app, you can decide it dynamically.
 
-```java
+ ```java
+ValuePotion.getInstance().setPushEnable(context, false);        // Disable push notification.
+ValuePotion.getInstance().setPushEnable(context, true);         // Enable push notification again.
 
-ValuePotion.getInstance().setPushEnable(context, false);
-
-// Returns boolean value whether push notification is enabled.
-ValuePotion.getInstance().isPushEnabled();
-
-ValuePotion.getInstance().setPushEnable(context, true);
-
-```
-
-### 6. Process Push Notification
-
-Create GCMIntentService extending GCMBaseIntentService and call `ValuePotion.treatPushMessage(context, bundle)` method at onMessage() method. If that method returns true, you don't have to do anything about that push notification because it's sent by ValuePotion for promotion.
-
-```java
-public class GCMIntentService extends GCMBaseIntentService {
-  @Override
-  protected void onMessage(Context context, Intent intent) {
-    Log.v(TAG, "onMessage");
-    Bundle bundle = intent.getExtras();
-    
-    if( ValuePotion.treatPushMessage(context, bundle) ){
-      // A push notification message sent by ValuePotion. Nothing to do.
-    }
-    else{
-      // Your own push notification message.
-    }
-  }
-}
+boolean isEnabled = ValuePotion.getInstance().isPushEnabled();  // Returns boolean value indicating if push notification is enabled.
 ```
 
 ## Advanced: Listener
@@ -447,35 +504,4 @@ void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rew
     Log.d(TAG, reward.toString() );
   }
 }
-```
-
-
-## Misc.
-
-### 1. Notification LED
-When users receive push notification and their phone screen is off, you can make the LED blink.
-
-```java
-int argb = 0xff2E691F;
-int onMs = 2000;
-int offMs = 1000;
-ValuePotion.setNotificationLights(context, argb, onMs, offMs);
-```
-
-The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. If you want to revert the configuration, please delete that code line. Then remove and install the app.
-
-### 2. Notification Vibration
-You can customize vibration pattern when user receives push notification.
-
-```java
-long[] pattern = {...};
-ValuePotion.setNotificationVibrate(context, pattern);
-```
-
-The code above will save its configuration in SharedPreference and the configuration will be used when user receives push notification. If you want to revert the configuration, please delete that code line. Then remove and install the app. To see more about vibration pattern, please refer to [Android SDK document](http://developer.android.com/reference/android/os/Vibrator.html).
-
-To use notification vibration, you need to add the following permission.
-
-```xml
-<uses-permission android:name="android.permission.VIBRATE" />
 ```

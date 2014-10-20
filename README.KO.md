@@ -74,14 +74,7 @@ public class MyActivity extends Activity {
 
 ```xml
 <!-- Valuepotion Components -->
-	<!-- for GCM push-notification interface -->
-	<activity
-			android:name="com.valuepotion.sdk.VPPopupActivity"
-			android:launchMode="singleInstance"
-			android:theme="@android:style/Theme.Translucent" >
-	</activity>
-
-	<!-- for GCM Push notification interface -->
+	<!-- for interstital ad interface -->
 	<activity
 			android:name="com.valuepotion.sdk.VPInterstitialActivity"
 			android:theme="@android:style/Theme.Translucent" >
@@ -270,78 +263,140 @@ ValuePotion.setUserAccountType("guest");
 밸류포션 Push Notification API와 연동하면, 손쉽게 Push 타입의 캠페인을 생성하여 사용자에게 메시지를 전송할 수 있습니다. 장기간 게임을 플레이 하지 않은 유저들이 다시 접속하도록 유도하거나, 게임 내 이벤트 소식을 알리는 등 다방면으로 활용이 가능합니다.
 
 ### 1. 인증서 등록
-[밸류포션](https://valuepotion.com) 웹사이트에서 앞서 등록한 앱 정보를 업데이트 해야 합니다. 앱 정보 수정 페이지에서 GCM ApiKey를 등록하십시오.
+[밸류포션](https://valuepotion.com) 웹사이트에서 앞서 등록한 앱 정보를 업데이트 해야 합니다. 앱 정보 수정 페이지에서 GCM ApiKey를 등록하십시오. GCM ApiKey 는 [Google Developers Console](https://console.developers.google.com/project)에서 발급 받은 Server Key 를 의미합니다.
 
 ### 2. AndroidManifest.xml 설정
 
+* 아래 퍼미션 관련 구문을 삽입해주세요.
+
 ```xml
-<!--
-   'PACKAGE_NAME' 을 앱 패키지 네임으로 변경하세요.
-    예)
-    <application> 태그의 'package' 속성 값이 'com.valuepotion.testapp' 라면,
-    'com.valuepotion.testapp.permission.C2D_MESSAGE' 로 값을 지정하세요.
--->
-<permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-<uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+<manifest ...>
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!--
+       'PACKAGE_NAME' 을 앱의 패키지 네임으로 변경하세요.
+        예)
+        <application> 태그의 'package' 속성 값이 'com.valuepotion.testapp' 라면,
+        'com.valuepotion.testapp.permission.C2D_MESSAGE' 로 값을 지정하세요.
+    -->
+    <permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="PACKAGE_NAME.permission.C2D_MESSAGE" />
+
+    <application ...
 ```
 
-### 3. GCM 클라이언트 구현
+* 아래와 같이 receiver 와 service, 그리고 activity 를 등록해주세요.
 
-[Implementing GCM Client](http://developer.android.com/intl/ko/google/gcm/client.html)를 참고하시기 바랍니다.
-아래 예제는 위 문서의 예제를 참고하여 작성하였습니다.
+```xml
+    <application ...>
+        ...
 
-### 4. Push Notification 활성화
-Push Notification 을 활성화 시키려면 GCM 클라이언트 기능을 구현한 후, registrationId를 전송하고, 받은 Push Notification 메세지를 처리하도록 해야합니다. 아래 예제를 참고하여 구현하세요.
+        <!--
+           'PACKAGE_NAME' 을 앱의 패키지 네임으로 변경하세요.
+        -->
 
-```java
-String regid = getRegistrationId(this);
-ValuePotion.getInstance().registerPushToken(regid);
+        <receiver
+            android:name="com.valuepotion.sdk.push.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.valuepotion.sdk.push.NOTIFICATION_OPENED" />
+
+                <category android:name="PACKAGE_NAME" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.valuepotion.sdk.push.GcmIntentService" />
+
+        <!-- GCM push-notification pop-up style -->
+        <activity
+            android:name="com.valuepotion.sdk.VPPopupActivity"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Translucent" />
+
+    ...
+    </application>
 ```
 
-### 5. Push Notification 비활성화
-Push Notification 을 비활성화 시키는 경우, 다음 예제를 참고하십시오.
+* 메인 액티비티에 launchMode 속성을 아래와 같이 `singleTask` 로 설정해주세요.
+ ```xml
+    <application ...>
+        ...
+        <activity
+            android:name="com.mycompany.testapp.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        ...
+    </application>
+```
+
+### 3. Activity 에 초기화 구문 삽입
+
+* `Valuepotion.getInstance().init(...)` 구문을 실행한 곳에 가서 아래와 같이 initGCM 함수를 호출해주세요. 보통 메인 액티비티의 onCreate() 함수에 위치해 있습니다.
 
 ```java
-// Push Notification 을 받지 않도록 변경됩니다.
+ValuePotion.initGCM(this, SENDER_ID);
+```
+
+* 위의 SENDER_ID 는 [Google Developers Console](https://console.developers.google.com/project)에서 발급 받은 Project Number 입니다.
+
+### 4. 진동, LED 설정
+
+* 선택적으로 진동 패턴과 LED 패턴을 커스터마이징 할 수 있습니다. 설정을 하지 않으면 OS 디폴트 값이 사용됩니다.
+
+```java
+ValuePotion.init(this, CLIENT_ID, SECRET_KEY);
+ValuePotion.initGCM(this, SENDER_ID);
+
+// LED Lights
+int argb = 0xff2E691F;
+int onMs = 2000;
+int offMs = 1000;
+ValuePotion.getInstance().setNotificationLights(context, argb, onMs, offMs);
+
+// Vibration Pattern
+long[] pattern = {...};
+ValuePotion.getInstance().setNotificationVibrate(context, pattern);
+```
+
+* 진동 패턴과 LED 패턴에 관한 값은 SharedPreference 에 저장됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치해주세요.
+* 진동 패턴에 관해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html) 를 참고해주세요.
+ * 그리고 진동을 커스터마이징 해서 쓰기 원하시면 위의 코드와 더불어 아래의 퍼미션을 AndroidManifest.xml 에 추가해야 합니다.
+
+   ```xml
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+
+### 5. 기타 설정
+
+#### 푸시 토큰 제거하기
+
+Valuepotion 서버로부터 해당 디바이스의 푸시 토큰을 제거하고 싶으면
+
+ ```java
 ValuePotion.getInstance().unregisterPushToken();
 ```
+를 실행시키면 됩니다.
 
-#### 5-1. Push Notification 임시 활성화/비활성화
+#### 푸시 임시 비활성화
 
-Push 메세지의 수신은 되지만, 표시되지 않습니다.
-App 내에서 제어하고자 할 때, 이용합니다.
+GCM 메시지는 수신하지만, 그걸 푸시 알림으로 표시할 지 말지를 결정합니다.
+App 내에서 푸시를 제어할 때 사용합니다.
 
-```java
+ ```java
+ValuePotion.getInstance().setPushEnable(context, false);        // 푸시를 비활성화합니다.
+ValuePotion.getInstance().setPushEnable(context, true);         // 푸시를 다시 활성화합니다.
 
-ValuePotion.getInstance().setPushEnable(context, false);
-
-// Push Notification 활성화 여부를 bool 타입으로 리턴합니다.
-ValuePotion.getInstance().isPushEnabled();
-
-ValuePotion.getInstance().setPushEnable(context, true);
-
-```
-
-### 6. Push Notification 수신 처리
-
-GCMBaseIntentService 를 상속하여 GCMIntentService를 만들 때, onMessage 내에서 ValuePotion.treatPushMessage(context, bundle)를 호출하도록 합니다.
-리턴값이 true 이면 ValuePotion이 프로모션을 위해 보낸 메세지이므로 별도의 처리가 필요없습니다.
-
-```java
-public class GCMIntentService extends GCMBaseIntentService {
-  @Override
-  protected void onMessage(Context context, Intent intent) {
-    Log.v(TAG, "onMessage");
-    Bundle bundle = intent.getExtras();
-    
-    if( ValuePotion.treatPushMessage(context, bundle) ){
-      // A push notification message sent by ValuePotion. Nothing to do.
-    }
-    else{
-      // Your own push notification message.
-    }
-  }
-}
+boolean isEnabled = ValuePotion.getInstance().isPushEnabled();  // 푸시가 활성화되어 있는지 boolean 리턴을 받습니다.
 ```
 
 ## 고급: Listener
@@ -453,34 +508,4 @@ void onRequestedReward(ValuePotion vp, String placement, ArrayList<VPReward> rew
     Log.d(TAG, reward.toString() );
   }
 }
-```
-
-## 기타 설정
-
-### 1. 푸시 LED 설정
-푸시를 받았을 때 폰의 화면이 꺼져있다면 LED 에 불이 들어오게 해 푸시가 온 걸 유저에게 알릴 수 있습니다.
-
-```java
-int argb = 0xff2E691F;
-int onMs = 2000;
-int offMs = 1000;
-ValuePotion.setNotificationLights(context, argb, onMs, offMs);
-```
-
-위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오.
-
-### 2. 푸시 진동 설정
-푸시를 받았을 때 울리는 진동의 패턴을 커스터마이징 할 수 있습니다.
-
-```java
-long[] pattern = {...};
-ValuePotion.setNotificationVibrate(context, pattern);
-```
-
-위와 같이 사용하면 해당 설정이 SharedPreference에 저장되어 계속 사용됩니다. 만약 설정을 되돌리고 싶다면, 위 구문을 제거하신 후 앱을 삭제한 뒤 재설치하십시오. 패턴에 대해서는 [안드로이드 SDK 공식 문서](http://developer.android.com/reference/android/os/Vibrator.html)를 참조하세요.
-
-푸시 진동을 사용하기 위해서는 AndroidManifest.xml 에 아래와 같이 퍼미션을 추가해야 합니다.
-
-```xml
-<uses-permission android:name="android.permission.VIBRATE" />
 ```
