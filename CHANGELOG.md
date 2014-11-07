@@ -1,5 +1,9 @@
 # Change Log
 
+## V1.0.22
+
+* Fixed a bug regarding push open.
+
 ## v1.0.21
 
 ### Upgrading Issue
