@@ -30,7 +30,7 @@ public class MyActivity extends Activity {
   public void onCreate() {
     super.onCreate();
     // Initialize SDK using Client ID and Secret Key that you got from ValuePotion website.
-    ValuePotion vp = ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
+    ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
   }
 }
 ```
