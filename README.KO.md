@@ -32,7 +32,7 @@ public class MyActivity extends Activity {
   public void onCreate() {
     super.onCreate();
     // 밸류포션 웹사이트에서 발급받은 Client ID 와 Secret Key 를 사용해 SDK를 초기화 합니다.
-    ValuePotion vp = ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
+    ValuePotion.init(this, "CLIENT_ID", "SECRET_KEY");
   }
 }
 ```
