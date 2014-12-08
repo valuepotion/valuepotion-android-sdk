@@ -1,6 +1,11 @@
 # Change Log
 
-## V1.0.22
+## v1.0.23
+
+* Registering gcm push token has been stabilized.
+* Improved performance of tracking custom events.
+
+## v1.0.22
 
 * Fixed a bug regarding push open.
 
