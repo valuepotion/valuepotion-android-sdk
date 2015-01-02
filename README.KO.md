@@ -102,10 +102,10 @@ public class MyActivity extends Activity {
 
 ```java
 // "default" 플레이스먼트에 대해 광고를 노출 합니다.
-ValuePotion.getInstance().openInterstitial();
+ValuePotion.getInstance().openInterstitial(activity);
 
 // "main_menu" 플레이스먼트에 대해 광고를 노출 합니다.
-ValuePotion.getInstance().openInterstitial("main_menu");
+ValuePotion.getInstance().openInterstitial(activity, "main_menu");
 ```
 
 
@@ -115,12 +115,12 @@ ValuePotion.getInstance().openInterstitial("main_menu");
 
 ```java
 // 최초 "after_login" 플레이스먼트에 대해 광고를 캐싱합니다.
-ValuePotion.getInstance().cacheInterstitial("after_login");
+ValuePotion.getInstance().cacheInterstitial(activity, "after_login");
 
 ...
 
 // 원하는 시점에 "after_login" 플레이스먼트에 대해 광고를 노출합니다.
-ValuePotion.getInstance().openInterstitial("after_login");
+ValuePotion.getInstance().openInterstitial(activity, "after_login");
 ```
 
 ### 3. 캐시가 있을 때만 인터스티셜 광고 노출하기
@@ -130,7 +130,7 @@ ValuePotion.getInstance().openInterstitial("after_login");
 // "item_shop" 플레이스먼트에 캐싱된 광고가 존재하는지 체크합니다.
 if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
   // "item_shop" 플레이스먼트에 대해 광고를 노출합니다.
-  ValuePotion.getInstance().openInterstitial("item_shop");
+  ValuePotion.getInstance().openInterstitial(activity, "item_shop");
 }
 ```
 
