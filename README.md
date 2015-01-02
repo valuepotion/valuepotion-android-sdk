@@ -100,10 +100,10 @@ If you've created a campaign at [ValuePotion](https://valuepotion.com), you can 
 
 ```java
 // Display ads at "default" placement.
-ValuePotion.getInstance().openInterstitial();
+ValuePotion.getInstance().openInterstitial(activity);
 
 // Display ads at "main_menu" placement.
-ValuePotion.getInstance().openInterstitial("main_menu");
+ValuePotion.getInstance().openInterstitial(activity, "main_menu");
 ```
 
 ### 2. Cache Interstitial Ads
@@ -112,12 +112,12 @@ Using `openInterstitial()` method, the SDK will download data for ads via HTTP a
 
 ```java
 // If you cache an ad for "after_login" placement once,
-ValuePotion.getInstance().cacheInterstitial("after_login");
+ValuePotion.getInstance().cacheInterstitial(activity, "after_login");
 
 ...
 
 // Later on, you can display the ad with no delay.
-ValuePotion.getInstance().openInterstitial("after_login");
+ValuePotion.getInstance().openInterstitial(activity, "after_login");
 ```
 
 ### 3. Display Interstitial Ads Only When Caches are Available
@@ -127,7 +127,7 @@ You can display interstitial ads only when caches are available.
 // Check if the cache for "item_shop" placement exists.
 if (ValuePotion.getInstance().hasCachedInterstitial("item_shop") {
   // then, display the ad for "item_shop" placement.
-  ValuePotion.getInstance().openInterstitial("item_shop");
+  ValuePotion.getInstance().openInterstitial(activity, "item_shop");
 }
 ```
 
