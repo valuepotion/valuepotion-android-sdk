@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.0.24
+* You can now specify category and label for payment events.
+```
+ValuePotion.getInstance().trackPurchaseEvent(category, eventName, label, amount, currency, orderId, productId, campaignId, contentId);
+```
+
 ## v1.0.23
 
 * Registering gcm push token has been stabilized.
