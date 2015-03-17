@@ -311,9 +311,14 @@ ValuePotion.setUserAccountType("guest");
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <action android:name="com.valuepotion.sdk.push.NOTIFICATION_OPENED" />
 
                 <category android:name="PACKAGE_NAME" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.valuepotion.sdk.push.NotificationOpenedReceiver">
+            <intent-filter>
+                <action android:name="com.valuepotion.sdk.push.NOTIFICATION_OPENED" />
             </intent-filter>
         </receiver>
         <service android:name="com.valuepotion.sdk.push.GcmIntentService" />
