@@ -20,7 +20,7 @@
         </receiver>
  ```
  then replace it with the code below:
- ```
+ ```xml
         <receiver
             android:name="com.valuepotion.sdk.push.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
