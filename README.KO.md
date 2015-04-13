@@ -175,13 +175,13 @@ ValuePotion.getInstance().trackEvent(category, action, label, value);
 
 ```java
 // 0.99 달러의 코인 아이템 구매가 발생
-String eventName = "purchase_coin";
+String action = "purchase_coin";
 double amount = 0.99f;
 String currency = "USD";
 String orderId = 결제 성공 후 발행된 영수증 번호 ex> "1000000126295148";
 String productId = 아이템의 식별자 ex> "com.valuepotion.tester.item_diamond_1";
 
-ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId);
+ValuePotion.getInstance().trackPurchaseEvent(action, amount, currency, orderId, productId);
 ```
 
 밸류포션은 In App Purchase (이하 IAP) 타입의 캠페인을 제공합니다. 게임 사용자가 IAP 타입의 광고를 통해 매출을 발생시킨 경우, 결제 이벤트에 추가 정보를 더해 전송하면 더욱 상세한 캠페인 별 매출 리포트를 제공 받으실 수 있습니다. 다음은 IAP 광고로부터 발생한 결제 이벤트를 전송하는 예제입니다.
@@ -199,7 +199,7 @@ ValuePotionListener listener = new ValuePotionListener(){
     ...
 
     // IAP 캠페인을 통해 1,200원의 다이아몬드 아이템 구매가 발생. purchase 객체에 있는 campaignId, contentId 를 함께 전송.
-    String eventName = "purchase_coin";
+    String action = "purchase_coin";
     double amount = 0.99f;
     String currency = "USD";
     String orderId = 결제 성공 후 발행된 영수증 번호 ex> "1000000126295148";
@@ -207,7 +207,7 @@ ValuePotionListener listener = new ValuePotionListener(){
     String campaignId = purchase.getCampaignId();
     String contentId = purchase.getContentId();
 
-    ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId, campaignId, contentId);
+    ValuePotion.getInstance().trackPurchaseEvent(action, amount, currency, orderId, productId, campaignId, contentId);
   }
   
   ...
@@ -217,7 +217,7 @@ ValuePotionListener listener = new ValuePotionListener(){
 
 비결제 이벤트처럼 category 와 label 을 지정할 수 있습니다.
 ```
-ValuePotion.getInstance().trackPurchaseEvent(category, eventName, label, amount, currency, orderId, productId, campaignId, contentId);
+ValuePotion.getInstance().trackPurchaseEvent(category, action, label, amount, currency, orderId, productId, campaignId, contentId);
 ```
 
 #### 참고

@@ -1,4 +1,4 @@
-# Valuepotion SDK for Android - Getting Started
+I# Valuepotion SDK for Android - Getting Started
 
 ## Before You Begin
 
@@ -173,13 +173,13 @@ The following code is an example to send payment event occurred in your game.
 
 ```java
 // User purchased $0.99 coin item.
-String eventName = "purchase_coin";
+String action = "purchase_coin";
 double amount = 0.99f;
 String currency = "USD";
 String orderId = The identifier of receipt after completing purchase. ex> "1000000126295148";
 String productId = The identifier of item. ex> "com.valuepotion.tester.item_diamond_1";
 
-ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId);
+ValuePotion.getInstance().trackPurchaseEvent(action, amount, currency, orderId, productId);
 ```
 
 ValuePotion provides campaign of In-App Purchase (IAP) type. When a user makes revenue via an ad of IAP type, if you add extra info to payment event, you can get revenue report per campaign in detail. The following code is how to send payment event which occurred from IAP ad.
@@ -197,7 +197,7 @@ ValuePotionListener listener = new ValuePotionListener(){
     ...
 
     // User purchased some Diamond item for KRW 1,200 via IAP campaign. So you're attaching campaignId and contentId from purchase object as payment event parameters.
-    String eventName = "purchase_coin";
+    String action = "purchase_coin";
     double amount = 0.99f;
     String currency = "USD";
     String orderId = The identifier of receipt after completing purchase. ex> "1000000126295148";
@@ -205,7 +205,7 @@ ValuePotionListener listener = new ValuePotionListener(){
     String campaignId = purchase.getCampaignId();
     String contentId = purchase.getContentId();
 
-    ValuePotion.getInstance().trackPurchaseEvent(eventName, amount, currency, orderId, productId, campaignId, contentId);
+    ValuePotion.getInstance().trackPurchaseEvent(action, amount, currency, orderId, productId, campaignId, contentId);
   }
   
   ...
@@ -215,7 +215,7 @@ ValuePotionListener listener = new ValuePotionListener(){
 
 You can also specify *category* and *label* like you did with non-payment event.
 ```
-ValuePotion.getInstance().trackPurchaseEvent(category, eventName, label, amount, currency, orderId, productId, campaignId, contentId);
+ValuePotion.getInstance().trackPurchaseEvent(category, action, label, amount, currency, orderId, productId, campaignId, contentId);
 ```
 
 #### Reference

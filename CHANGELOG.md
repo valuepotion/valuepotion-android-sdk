@@ -1,5 +1,8 @@
 # Change Log
 
+## v1.0.26
+* Minor bug fixes
+
 ## v1.0.25
 * Minor bug fixes
 * Improved stability
