@@ -1,4 +1,4 @@
-I# Valuepotion SDK for Android - Getting Started
+# Valuepotion SDK for Android - Getting Started
 
 ## Before You Begin
 
